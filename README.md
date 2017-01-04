@@ -6,7 +6,7 @@
 
 ##Poradniczek commandline'owy:
 1. Bedac w folderze w ktorym jest plik bazodanowy:
-    java -classpath <sciezka do Main.class>:<sciezka do sqlite-jdbci-*.jar> Main
+    java -classpath 'sciezka do Main.class':'sciezka do sqlite-jdbci-*.jar' Main
     
     sciezki relatywnie z folderu w ktorym jestesmy
     PS Polecam sobie najpierw javac'nac
