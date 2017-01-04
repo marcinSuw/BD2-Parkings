@@ -1,16 +1,15 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.Statement;
 
 /**
  * Created by szwarc on 02.01.17.
  */
-public class DbConecction {
+public class DbConnector {
 
     Connection connection;
 
-    public DbConecction(String file_name){
+    public DbConnector(String file_name){
 
         try {
             Class.forName("org.sqlite.JDBC");
@@ -23,7 +22,6 @@ public class DbConecction {
         System.out.println("Opened database successfully");
 
     }
-
 
     public PreparedStatement getPrepStetm(String sql){
         PreparedStatement  stmt = null;
@@ -50,6 +48,7 @@ public class DbConecction {
         try {
             if (connection!= null) {
                 connection.close();
+                System.out.println("Connection closed successfully!");
             }
         } catch (Exception e) {
             System.out.println("Could not close the current connection.");

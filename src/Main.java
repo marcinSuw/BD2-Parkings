@@ -14,9 +14,23 @@ public class Main {
     public static void main( String args[] ){
         DataBaseModel data_model = new DataBaseModel();
         DataBaseView data_view = new DataBaseView();
-        data_model.insert_parking(1,8);
-        /*data_model.insert_address(1,"12-123", "Polna", 12);
-        data_model.insert_guard(12345,"Marcin", "Suwala");
+        //data_view.setMainTable(data_model.getParkings());
+
+        // Parking test
+        /*data_model.getParkingDao().addParking(2,10);
+        data_model.getParkingDao().updateParking(2,20, 2);
+        data_view.setMainTable(data_model.getParkingDao().getParkings());
+        data_model.getParkingDao().deleteParking(2);*/
+
+        //Address test
+        /*data_model.getAddressDao().addAddress(2,"12-123", "Polna", 12);
+        data_model.getAddressDao().updateAddress(2,3,"12-134", "Zlota", 12);
+        data_view.setMainTable(data_model.getAddressDao().getAddresses());
+        data_model.getAddressDao().deleteAddress(2);*/
+
+        //
+        
+        /*data_model.insert_guard(12345,"Marcin", "Suwala");
         data_model.insert_parking_guards(12345, 1);
         String start_dates = "2017-01-03 14:35";
         String end_dates = null;
@@ -40,6 +54,7 @@ public class Main {
         data_model.insert_ticket(12345, 1, 50, "123wr", false);
         data_model.insert_transaction(1, start_dates, end_dates, 30);
         System.out.println("Finished");*/
+        data_model.close_connection();
     }
 
 }

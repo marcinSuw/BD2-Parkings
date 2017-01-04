@@ -1,42 +1,34 @@
+import daoInterfaces.AddressDao;
 import daoInterfaces.ParkingDao;
+import daoInterfacesImpl.AddressDaoImpl;
 import daoInterfacesImpl.ParkingDaoImpl;
 
 import java.sql.PreparedStatement;
-import java.sql.Statement;
+import java.sql.ResultSet;
 
 /**
  * Created by szwarc on 02.01.17.
  */
 
 public class DataBaseModel {
-    private DbConecction conect;
+    private DbConnector connector;
     private ParkingDao parkingDao;
+    private AddressDao addressDao;
 
     public DataBaseModel(){
-        conect = new DbConecction("test.sqlite");
-        parkingDao = new ParkingDaoImpl(conect.getConnection());
+        connector = new DbConnector("test.sqlite");
+        parkingDao = new ParkingDaoImpl(connector.getConnection());
+        addressDao = new AddressDaoImpl(connector.getConnection());
 
     }
 
-    void insert_parking(int id_address, int cost_per_hour) {
-        parkingDao.addParking(id_address,cost_per_hour);
-    }
+    public ParkingDao getParkingDao() { return parkingDao; }
 
-    void insert_address(int id_parking, String postal_code , String street_name, int number){
-        String sql = "INSERT INTO \"Addresses\" VALUES(NULL,?, ?, ?, ?);";
-        PreparedStatement prep = conect.getPrepStetm(sql);
-        try {
-            prep.setInt(1, id_parking);
-            prep.setString(2, postal_code);
-            prep.setString(3, street_name);
-            prep.setInt(4, number);
-            prep.executeUpdate();
-        }
-        catch(Exception e){ handle_exception(e);}
-    }
+    public AddressDao getAddressDao() { return addressDao; }
+
     void insert_guard(int pesel, String name, String surname){
         String sql = " INSERT INTO \"Guards\" VALUES(?, ?, ?);";
-        PreparedStatement prep = conect.getPrepStetm(sql);
+        PreparedStatement prep = connector.getPrepStetm(sql);
 
         try {
 
@@ -50,7 +42,7 @@ public class DataBaseModel {
 
     void insert_parking_guards(int pesel, int id_parking){
         String sql = "INSERT INTO \"Parkings_Guards\" VALUES(?, ?);";
-        PreparedStatement prep = conect.getPrepStetm(sql);
+        PreparedStatement prep = connector.getPrepStetm(sql);
 
         try {
             prep.setInt(1, pesel);
@@ -63,7 +55,7 @@ public class DataBaseModel {
     void insert_ticket(int pesel, int id_parking, int charge, String regNumber, boolean paid){
 
         String sql = "INSERT INTO \"Tickets\" VALUES(NULL, ?, ?, ?, ?, ?);";
-        PreparedStatement prep = conect.getPrepStetm(sql);
+        PreparedStatement prep = connector.getPrepStetm(sql);
         try {
             prep.setInt(1, pesel);
             prep.setInt(2, id_parking);
@@ -78,7 +70,7 @@ public class DataBaseModel {
 
     void insert_transaction(int id_meter, String start_date, String end_date, int cost){
         String sql = "INSERT INTO \"Transactions\" VALUES(NULL, ?, ?, ?, ?);";
-        PreparedStatement prep = conect.getPrepStetm(sql);
+        PreparedStatement prep = connector.getPrepStetm(sql);
         try{
             prep.setInt(1, id_meter);
             prep.setString(2, start_date);
@@ -93,7 +85,7 @@ public class DataBaseModel {
     //TODO
     void insert_meter(int id_parking, int m_amount, int m_capcity, int p_amount, int p_capcity ){
         String sql = "INSERT INTO \"Meters\" VALUES(NULL, ?, ?, ?, ?, ?);";
-        PreparedStatement prep = conect.getPrepStetm(sql);
+        PreparedStatement prep = connector.getPrepStetm(sql);
         try{
             prep.setInt(1, id_parking);
             prep.setInt(2, m_amount);
@@ -106,10 +98,13 @@ public class DataBaseModel {
     }
 
     private void handle_exception(Exception e){
-        System.err.println(e.getClass().getName() + ": " + e.getMessage());
+        System.err.println("DataBaseModel: "+ e.getClass().getName() + ": " + e.getMessage());
         System.exit(0);
     }
 
+    public void close_connection(){
+        connector.closeDB();
+    }
 
 }
 
