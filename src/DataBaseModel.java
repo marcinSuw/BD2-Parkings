@@ -1,9 +1,11 @@
 import daoInterfaces.AddressDao;
 import daoInterfaces.GuardDao;
 import daoInterfaces.ParkingDao;
+import daoInterfaces.ParkingGuardDao;
 import daoInterfacesImpl.AddressDaoImpl;
 import daoInterfacesImpl.GuardDaoImpl;
 import daoInterfacesImpl.ParkingDaoImpl;
+import daoInterfacesImpl.ParkingGuardDaoImpl;
 import objects.Guard;
 
 import java.sql.PreparedStatement;
@@ -18,13 +20,14 @@ public class DataBaseModel {
     private ParkingDao parkingDao;
     private AddressDao addressDao;
     private GuardDao guardDao;
+    private ParkingGuardDao parkingGuardDao;
 
     public DataBaseModel(){
         connector = new DbConnector("test.sqlite");
         parkingDao = new ParkingDaoImpl(connector.getConnection());
         addressDao = new AddressDaoImpl(connector.getConnection());
         guardDao = new GuardDaoImpl(connector.getConnection());
-
+        parkingGuardDao = new ParkingGuardDaoImpl(connector.getConnection());
     }
 
     public ParkingDao getParkingDao() { return parkingDao; }
@@ -33,19 +36,9 @@ public class DataBaseModel {
 
     public GuardDao getGuardDao() { return guardDao; }
 
-    void insert_guard(int pesel, String name, String surname){
-        String sql = " INSERT INTO \"Guards\" VALUES(?, ?, ?);";
-        PreparedStatement prep = connector.getPrepStetm(sql);
+    public ParkingGuardDao getParkingGuardDao() { return parkingGuardDao; }
 
-        try {
 
-            prep.setInt(1, pesel);
-            prep.setString(2, name );
-            prep.setString(3, surname);
-            prep.executeUpdate();
-        }
-        catch(Exception e){ handle_exception(e);}
-    }
 
     void insert_parking_guards(int pesel, int id_parking){
         String sql = "INSERT INTO \"Parkings_Guards\" VALUES(?, ?);";

@@ -35,6 +35,12 @@ public class Main {
         data_view.setMainTable(data_model.getGuardDao().getGuards());
         data_model.getGuardDao().deleteGuard(12345);*/
 
+        // Parking_Guard
+        /*data_model.getParkingGuardDao().addParkingGuard(1, 12345);
+        data_model.getParkingGuardDao().updateParkingGuard(1, 12344);
+        data_view.setMainTable(data_model.getParkingGuardDao().getParkingsGuards());
+        data_model.getParkingGuardDao().deleteParkingGuard(1);*/
+
         /*data_model.insert_guard(12345,"Marcin", "Suwala");
         data_model.insert_parking_guards(12345, 1);
         String start_dates = "2017-01-03 14:35";
