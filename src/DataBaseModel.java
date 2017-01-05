@@ -1,11 +1,5 @@
-import daoInterfaces.AddressDao;
-import daoInterfaces.GuardDao;
-import daoInterfaces.ParkingDao;
-import daoInterfaces.ParkingGuardDao;
-import daoInterfacesImpl.AddressDaoImpl;
-import daoInterfacesImpl.GuardDaoImpl;
-import daoInterfacesImpl.ParkingDaoImpl;
-import daoInterfacesImpl.ParkingGuardDaoImpl;
+import daoInterfaces.*;
+import daoInterfacesImpl.*;
 import objects.Guard;
 
 import java.sql.PreparedStatement;
@@ -21,6 +15,7 @@ public class DataBaseModel {
     private AddressDao addressDao;
     private GuardDao guardDao;
     private ParkingGuardDao parkingGuardDao;
+    private TicketDao ticketDao;
 
     public DataBaseModel(){
         connector = new DbConnector("test.sqlite");
@@ -28,29 +23,19 @@ public class DataBaseModel {
         addressDao = new AddressDaoImpl(connector.getConnection());
         guardDao = new GuardDaoImpl(connector.getConnection());
         parkingGuardDao = new ParkingGuardDaoImpl(connector.getConnection());
+        ticketDao = new TicketDaoImpl(connector.getConnection());
     }
 
-    public ParkingDao getParkingDao() { return parkingDao; }
+    public ParkingDao getParkingDao() { return this.parkingDao; }
 
-    public AddressDao getAddressDao() { return addressDao; }
+    public AddressDao getAddressDao() { return this.addressDao; }
 
-    public GuardDao getGuardDao() { return guardDao; }
+    public GuardDao getGuardDao() { return this.guardDao; }
 
-    public ParkingGuardDao getParkingGuardDao() { return parkingGuardDao; }
+    public ParkingGuardDao getParkingGuardDao() { return this.parkingGuardDao; }
 
+    public  TicketDao getTicketDao() { return this.ticketDao; }
 
-
-    void insert_parking_guards(int pesel, int id_parking){
-        String sql = "INSERT INTO \"Parkings_Guards\" VALUES(?, ?);";
-        PreparedStatement prep = connector.getPrepStetm(sql);
-
-        try {
-            prep.setInt(1, pesel);
-            prep.setInt(2, id_parking);
-            prep.executeUpdate();
-        }
-        catch(Exception e){ handle_exception(e);}
-    }
 
     void insert_ticket(int pesel, int id_parking, int charge, String regNumber, boolean paid){
 

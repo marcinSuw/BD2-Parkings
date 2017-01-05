@@ -18,8 +18,8 @@ public class Main {
         //data_view.setMainTable(data_model.getParkings());
 
         // Parking test
-        /*data_model.getParkingDao().addParking(2,10);
-        data_model.getParkingDao().updateParking(2,20, 2);
+        /*data_model.getParkingDao().addParking(1,10);
+        data_model.getParkingDao().updateParking(2,20, 1);
         data_view.setMainTable(data_model.getParkingDao().getParkings());
         data_model.getParkingDao().deleteParking(2);*/
 
@@ -35,11 +35,17 @@ public class Main {
         data_view.setMainTable(data_model.getGuardDao().getGuards());
         data_model.getGuardDao().deleteGuard(12345);*/
 
-        // Parking_Guard
+        // Parking_Guard test
         /*data_model.getParkingGuardDao().addParkingGuard(1, 12345);
         data_model.getParkingGuardDao().updateParkingGuard(1, 12344);
         data_view.setMainTable(data_model.getParkingGuardDao().getParkingsGuards());
         data_model.getParkingGuardDao().deleteParkingGuard(1);*/
+
+        // Ticket test
+        /*data_model.getTicketDao().addTicket(12345, 1, 50 , "Wr123", false );
+        data_view.setMainTable(data_model.getTicketDao().getTickets());
+        data_model.getTicketDao().deleteTicket(1);*/
+
 
         /*data_model.insert_guard(12345,"Marcin", "Suwala");
         data_model.insert_parking_guards(12345, 1);
