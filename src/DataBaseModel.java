@@ -1,7 +1,10 @@
 import daoInterfaces.AddressDao;
+import daoInterfaces.GuardDao;
 import daoInterfaces.ParkingDao;
 import daoInterfacesImpl.AddressDaoImpl;
+import daoInterfacesImpl.GuardDaoImpl;
 import daoInterfacesImpl.ParkingDaoImpl;
+import objects.Guard;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,17 +17,21 @@ public class DataBaseModel {
     private DbConnector connector;
     private ParkingDao parkingDao;
     private AddressDao addressDao;
+    private GuardDao guardDao;
 
     public DataBaseModel(){
         connector = new DbConnector("test.sqlite");
         parkingDao = new ParkingDaoImpl(connector.getConnection());
         addressDao = new AddressDaoImpl(connector.getConnection());
+        guardDao = new GuardDaoImpl(connector.getConnection());
 
     }
 
     public ParkingDao getParkingDao() { return parkingDao; }
 
     public AddressDao getAddressDao() { return addressDao; }
+
+    public GuardDao getGuardDao() { return guardDao; }
 
     void insert_guard(int pesel, String name, String surname){
         String sql = " INSERT INTO \"Guards\" VALUES(?, ?, ?);";

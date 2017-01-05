@@ -14,6 +14,7 @@ public class Main {
     public static void main( String args[] ){
         DataBaseModel data_model = new DataBaseModel();
         DataBaseView data_view = new DataBaseView();
+
         //data_view.setMainTable(data_model.getParkings());
 
         // Parking test
@@ -28,8 +29,12 @@ public class Main {
         data_view.setMainTable(data_model.getAddressDao().getAddresses());
         data_model.getAddressDao().deleteAddress(2);*/
 
-        //
-        
+        //Guard test
+        /*data_model.getGuardDao().addGuard(12345, "Marcin", "Suwala");
+        data_model.getGuardDao().updateGuard(12345, "Marcin", "Zakala");
+        data_view.setMainTable(data_model.getGuardDao().getGuards());
+        data_model.getGuardDao().deleteGuard(12345);*/
+
         /*data_model.insert_guard(12345,"Marcin", "Suwala");
         data_model.insert_parking_guards(12345, 1);
         String start_dates = "2017-01-03 14:35";
