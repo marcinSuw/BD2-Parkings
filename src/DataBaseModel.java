@@ -42,7 +42,7 @@ public class DataBaseModel {
     
     public String[] getAllTableNames() {
         //propably should be done smarter
-        return new String[]{"Parkings", "Addresses", "Guards", "Parkings_Guards", "Tickets"};
+        return new String[]{"Parkings", "Addresses", "Guards", "Parkings_Guards", "Tickets", "Meters", "Transactions"};
     }
 
     void insert_ticket(int pesel, int id_parking, int charge, String regNumber, boolean paid){
@@ -99,6 +99,24 @@ public class DataBaseModel {
                     //TODO:
                     //int address_key = getAddressDao().addAddress(
                     getParkingDao().addParking(Integer.parseInt(input.get(0)), Integer.parseInt(input.get(1)));
+                    break;
+                case "Guards":
+                    getGuardDao().addGuard(Integer.parseInt(input.get(0)), input.get(1), input.get(2));
+                    break;
+                case "Tickets":
+                    getTicketDao().addTicket(Integer.parseInt(input.get(0)), Integer.parseInt(input.get(1)), Integer.parseInt(input.get(2)), input.get(3), false);
+                    break;
+                case "Meters":
+                    //TODO:
+                    break;
+                case "Transactions":
+                    //TODO:
+                    break;
+                case "Parkings_Guards":
+                    getParkingGuardDao().addParkingGuard(Integer.parseInt(input.get(0)), Integer.parseInt(input.get(1)));
+                    break;
+    	        default:
+    	        	throw new RuntimeException("Option not present for adding");
             }
         } catch (Exception e) {
             return e.getClass() + " " + e.getMessage();

@@ -121,6 +121,39 @@ public class DataBaseView {
                     new JLabel("Numer ulicy"),
                     new JTextField(),
     	    	};
+            case "Guards":
+                return new JComponent[] {
+                    new JLabel("Pesel"),
+                    new JTextField(),
+                    new JLabel("Imie"),
+                    new JTextField(),
+                    new JLabel("Nazwisko"),
+                    new JTextField(),
+                };
+            case "Tickets":
+                return new JComponent[] {
+                    new JLabel("Pesel"),
+                    new JTextField(),
+                    new JLabel("ID parkingu"),
+                    new JTextField(),
+                    new JLabel("Oplata"),
+                    new JTextField(),
+                    new JLabel("Numer Rejestracyjny"),
+                    new JTextField(),
+                };
+            case "Meters":
+                //TODO:
+                return new JComponent[] {};
+            case "Transactions":
+                //TODO:
+                return new JComponent[] {};
+            case "Parkings_Guards":
+                return new JComponent[] {
+                    new JLabel("Id parkingu"),
+                    new JTextField(),
+                    new JLabel("Pesel"),
+                    new JTextField(),
+                };
     	    default:
     	    	throw new RuntimeException("Option not present for adding");
     	}
