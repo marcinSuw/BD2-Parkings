@@ -17,3 +17,6 @@ hs_err_pid*
 *.sqlite
 
 run.sh
+.classpath
+.project
+

@@ -34,8 +34,14 @@ public class DataBaseModel {
 
     public ParkingGuardDao getParkingGuardDao() { return this.parkingGuardDao; }
 
-    public  TicketDao getTicketDao() { return this.ticketDao; }
-
+    public TicketDao getTicketDao() { return this.ticketDao; }
+    
+    public DbConnector getConnector() { return this.connector; }
+    
+    public String[] getAllTableNames() {
+        //propably should be done smarter
+        return new String[]{"Parkings", "Addresses", "Guards", "Parkings_Guards", "Tickets"};
+    }
 
     void insert_ticket(int pesel, int id_parking, int charge, String regNumber, boolean paid){
 

@@ -13,9 +13,9 @@ public class Main {
 
     public static void main( String args[] ){
         DataBaseModel data_model = new DataBaseModel();
-        DataBaseView data_view = new DataBaseView();
+        DataBaseView data_view = new DataBaseView(data_model);
 
-        //data_view.setMainTable(data_model.getParkings());
+        data_view.setMainTable(data_model.getParkingDao().getParkings());
 
         // Parking test
         /*data_model.getParkingDao().addParking(1,10);
@@ -71,7 +71,7 @@ public class Main {
         data_model.insert_ticket(12345, 1, 50, "123wr", false);
         data_model.insert_transaction(1, start_dates, end_dates, 30);
         System.out.println("Finished");*/
-        data_model.close_connection();
+        //data_model.close_connection();
     }
 
 }
