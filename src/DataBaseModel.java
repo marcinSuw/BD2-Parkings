@@ -4,6 +4,8 @@ import objects.Guard;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by szwarc on 02.01.17.
@@ -86,6 +88,22 @@ public class DataBaseModel {
             prep.executeUpdate();
         }
         catch(Exception e){ handle_exception(e);}
+    }
+
+    public String addFromUserInput(String table, ArrayList<String> input) {
+        if (!Arrays.asList(getAllTableNames()).contains(table)) 
+            throw new RuntimeException("No table of name " + table + " exist");
+        try {
+            switch(table) {
+                case "Parkings":
+                    //TODO:
+                    //int address_key = getAddressDao().addAddress(
+                    getParkingDao().addParking(Integer.parseInt(input.get(0)), Integer.parseInt(input.get(1)));
+            }
+        } catch (Exception e) {
+            return e.getClass() + " " + e.getMessage();
+        }
+        return null;
     }
 
     private void handle_exception(Exception e){

@@ -10,6 +10,7 @@ import java.awt.event.*;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.util.Vector;
+import java.util.ArrayList;
 import daoInterfacesImpl.*;
 
 /**
@@ -28,9 +29,16 @@ public class DataBaseView {
     private JTable mainTable;
     private JScrollPane mainPane;
     private JList<String> tableList;
-	private JScrollPane listScroller;
+    private JButton addElementButton;
 
     private void prepareGUI(){
+    	prepareMainFrame();
+    	prepareTableList();
+    	prepareButtons();
+        mainFrame.setVisible(true);
+    }
+
+    private void prepareMainFrame() {
         mainFrame = new JFrame();
         mainTable = new JTable();
         mainPane = new JScrollPane(mainTable);
@@ -41,9 +49,10 @@ public class DataBaseView {
         mainFrame.setTitle("DataBase");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        mainFrame.setVisible(true);
         mainPane.setVisible(true);
-
+    }
+    
+    private void prepareTableList() {
         tableList = new JList<String>(model.getAllTableNames());
         tableList.setVisibleRowCount(model.getAllTableNames().length);
         tableList.addListSelectionListener(new ListSelectionListener(){
@@ -52,18 +61,71 @@ public class DataBaseView {
             		current_row = current_row > event.getFirstIndex()
             				? event.getFirstIndex()
             				: event.getLastIndex();
+                    String table_name = model.getAllTableNames()[current_row];
+                    if(table_name.equals("Addresses"))
+                        addElementButton.setEnabled(false);
+                    else
+                        addElementButton.setEnabled(true);
             		setMainTable(new DaoUtilities().get_objects(model.getConnector().getConnection(), model.getAllTableNames()[current_row]));
             	}
             }
           	private int current_row;
         });
 
-        listScroller = new JScrollPane(tableList);
-        listScroller.setVisible(true);
         mainFrame.add(tableList, BorderLayout.WEST);
     }
 
+    private void prepareButtons() {
+    	JToolBar toolbar = new JToolBar();
+    	toolbar.setFloatable(false);
+    	toolbar.setLayout(new BoxLayout(toolbar, BoxLayout.Y_AXIS));
 
+    	addElementButton = new JButton("Dodaj rekord");
+        addElementButton.setEnabled(false);
+    	addElementButton.addActionListener(new ActionListener() {
+    		public void actionPerformed(ActionEvent event) {
+    			if(!tableList.isSelectionEmpty()) {
+    				JComponent[] components = getComponentsFor(tableList.getSelectedValue());
+    				int result = JOptionPane.showConfirmDialog(null, components, "Dodawanie tablicy:", JOptionPane.OK_CANCEL_OPTION);
+    		        
+    				if(result == 0) {
+                        ArrayList<String> user_input = new ArrayList<String>();
+    					for(int i = 1; i < components.length; i += 2)
+    						user_input.add(((JTextField)components[i]).getText());
+
+                        String answer = model.addFromUserInput(tableList.getSelectedValue(), user_input);
+                        if(answer != null)
+                            JOptionPane.showMessageDialog(null, new JLabel(answer), "Nie udalo sie dodac", JOptionPane.OK_OPTION);
+                        else
+            		        setMainTable(new DaoUtilities().get_objects(model.getConnector().getConnection(), tableList.getSelectedValue()));
+                    }
+    			}
+    		}
+    	});
+    	toolbar.add(addElementButton);
+    	toolbar.add(new JButton("Keepo"));
+    	
+    	mainFrame.add(toolbar, BorderLayout.EAST);
+    }
+    
+    private JComponent[] getComponentsFor(String chosen_table) {
+    	switch(chosen_table) {
+    	    case "Parkings":
+    	    	return new JComponent[] {
+    	    		new JLabel("Koszt za godzine"),
+    	    		new JTextField(),
+                    new JLabel("Kod pocztowy"),
+                    new JTextField(),
+                    new JLabel("Ulica"),
+                    new JTextField(),
+                    new JLabel("Numer ulicy"),
+                    new JTextField(),
+    	    	};
+    	    default:
+    	    	throw new RuntimeException("Option not present for adding");
+    	}
+    }
+    
     public void setMainTable(ResultSet data){
         mainTable.setModel(buildTableModel(data));
         //mainTable.setVisible(true);
