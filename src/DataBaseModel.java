@@ -94,17 +94,20 @@ public class DataBaseModel {
         if (!Arrays.asList(getAllTableNames()).contains(table)) 
             throw new RuntimeException("No table of name " + table + " exist");
         try {
+            int key = input.get(0) == null
+                ? 0
+                : Integer.parse(input.get(0));
             switch(table) {
                 case "Parkings":
                     //TODO:
                     //int address_key = getAddressDao().addAddress(
-                    getParkingDao().addParking(Integer.parseInt(input.get(0)), Integer.parseInt(input.get(1)));
+                    getParkingDao().addParking(key, Integer.parseInt(input.get(1)), Integer.parseInt(input.get(2)));
                     break;
                 case "Guards":
-                    getGuardDao().addGuard(Integer.parseInt(input.get(0)), input.get(1), input.get(2));
+                    getGuardDao().addGuard(key, Integer.parseInt(input.get(1)), input.get(2), input.get(3));
                     break;
                 case "Tickets":
-                    getTicketDao().addTicket(Integer.parseInt(input.get(0)), Integer.parseInt(input.get(1)), Integer.parseInt(input.get(2)), input.get(3), false);
+                    getTicketDao().addTicket(key, Integer.parseInt(input.get(1)), Integer.parseInt(input.get(2)), Integer.parseInt(input.get(3)), input.get(3), false);
                     break;
                 case "Meters":
                     //TODO:
@@ -113,10 +116,44 @@ public class DataBaseModel {
                     //TODO:
                     break;
                 case "Parkings_Guards":
-                    getParkingGuardDao().addParkingGuard(Integer.parseInt(input.get(0)), Integer.parseInt(input.get(1)));
+                    getParkingGuardDao().addParkingGuard(key, Integer.parseInt(input.get(1)), Integer.parseInt(input.get(2)));
                     break;
     	        default:
     	        	throw new RuntimeException("Option not present for adding");
+            }
+        } catch (Exception e) {
+            return e.getClass() + " " + e.getMessage();
+        }
+        return null;
+    }
+
+    public String deleteFromUserInput(String table, String key) {
+        if (!Arrays.asList(getAllTableNames()).contains(table)) 
+            throw new RuntimeException("No table of name " + table + " exist");
+        try {
+            switch(table) {
+                case "Parkings":
+                    //TODO:
+                    //int deleteress_key = getdeleteressDao().deletedeleteress(
+                    getParkingDao().deleteParking(Integer.parseInt(key));
+                    break;
+                case "Guards":
+                    getGuardDao().deleteGuard(Integer.parseInt(key));
+                    break;
+                case "Tickets":
+                    getTicketDao().deleteTicket(Integer.parseInt(key));
+                    break;
+                case "Meters":
+                    //TODO:
+                    break;
+                case "Transactions":
+                    //TODO:
+                    break;
+                case "Parkings_Guards":
+                    getParkingGuardDao().deleteParkingGuard(Integer.parseInt(key));
+                    break;
+    	        default:
+    	        	throw new RuntimeException("Option not present for deleteing");
             }
         } catch (Exception e) {
             return e.getClass() + " " + e.getMessage();
