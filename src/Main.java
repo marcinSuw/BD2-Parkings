@@ -15,7 +15,7 @@ public class Main {
         DataBaseModel data_model = new DataBaseModel();
         DataBaseView data_view = new DataBaseView(data_model);
 
-        data_view.setMainTable(data_model.getParkingDao().getParkings());
+        //data_view.setMainTable(data_model.getParkingDao().getParkings());
 
         // Parking test
         /*data_model.getParkingDao().addParking(1,10);

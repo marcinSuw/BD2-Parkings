@@ -4,6 +4,8 @@ import objects.Guard;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by szwarc on 02.01.17.
@@ -40,7 +42,7 @@ public class DataBaseModel {
     
     public String[] getAllTableNames() {
         //propably should be done smarter
-        return new String[]{"Parkings", "Addresses", "Guards", "Parkings_Guards", "Tickets"};
+        return new String[]{"Parkings", "Addresses", "Guards", "Parkings_Guards", "Tickets", "Meters", "Transactions"};
     }
 
     void insert_ticket(int pesel, int id_parking, int charge, String regNumber, boolean paid){
@@ -86,6 +88,40 @@ public class DataBaseModel {
             prep.executeUpdate();
         }
         catch(Exception e){ handle_exception(e);}
+    }
+
+    public String addFromUserInput(String table, ArrayList<String> input) {
+        if (!Arrays.asList(getAllTableNames()).contains(table)) 
+            throw new RuntimeException("No table of name " + table + " exist");
+        try {
+            switch(table) {
+                case "Parkings":
+                    //TODO:
+                    //int address_key = getAddressDao().addAddress(
+                    getParkingDao().addParking(Integer.parseInt(input.get(0)), Integer.parseInt(input.get(1)));
+                    break;
+                case "Guards":
+                    getGuardDao().addGuard(Integer.parseInt(input.get(0)), input.get(1), input.get(2));
+                    break;
+                case "Tickets":
+                    getTicketDao().addTicket(Integer.parseInt(input.get(0)), Integer.parseInt(input.get(1)), Integer.parseInt(input.get(2)), input.get(3), false);
+                    break;
+                case "Meters":
+                    //TODO:
+                    break;
+                case "Transactions":
+                    //TODO:
+                    break;
+                case "Parkings_Guards":
+                    getParkingGuardDao().addParkingGuard(Integer.parseInt(input.get(0)), Integer.parseInt(input.get(1)));
+                    break;
+    	        default:
+    	        	throw new RuntimeException("Option not present for adding");
+            }
+        } catch (Exception e) {
+            return e.getClass() + " " + e.getMessage();
+        }
+        return null;
     }
 
     private void handle_exception(Exception e){
