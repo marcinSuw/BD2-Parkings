@@ -18,6 +18,8 @@ public class DataBaseModel {
     private GuardDao guardDao;
     private ParkingGuardDao parkingGuardDao;
     private TicketDao ticketDao;
+    private MeterDao meterDao;
+    private TransactionDao transactionDao;
 
     public DataBaseModel(){
         connector = new DbConnector("test.sqlite");
@@ -26,6 +28,8 @@ public class DataBaseModel {
         guardDao = new GuardDaoImpl(connector.getConnection());
         parkingGuardDao = new ParkingGuardDaoImpl(connector.getConnection());
         ticketDao = new TicketDaoImpl(connector.getConnection());
+        meterDao = new MeterDaoImpl(connector.getConnection());
+        transactionDao = new TransactionDaoImpl(connector.getConnection());
     }
 
     public ParkingDao getParkingDao() { return this.parkingDao; }
@@ -39,27 +43,16 @@ public class DataBaseModel {
     public TicketDao getTicketDao() { return this.ticketDao; }
     
     public DbConnector getConnector() { return this.connector; }
+
+    public MeterDao getMeterDao() { return  this.meterDao; }
+
+    public TransactionDao getTransactionDao() { return  this.transactionDao; }
     
     public String[] getAllTableNames() {
         //propably should be done smarter
         return new String[]{"Parkings", "Addresses", "Guards", "Parkings_Guards", "Tickets", "Meters", "Transactions"};
     }
 
-    void insert_ticket(int pesel, int id_parking, int charge, String regNumber, boolean paid){
-
-        String sql = "INSERT INTO \"Tickets\" VALUES(NULL, ?, ?, ?, ?, ?);";
-        PreparedStatement prep = connector.getPrepStetm(sql);
-        try {
-            prep.setInt(1, pesel);
-            prep.setInt(2, id_parking);
-            prep.setInt(3, charge);
-            prep.setString(4, regNumber);
-            prep.setBoolean(5, paid);
-            prep.executeUpdate();
-        }
-        catch (Exception e){    handle_exception(e);    }
-
-    }
 
     void insert_transaction(int id_meter, String start_date, String end_date, int cost){
         String sql = "INSERT INTO \"Transactions\" VALUES(NULL, ?, ?, ?, ?);";
@@ -75,20 +68,13 @@ public class DataBaseModel {
         catch(Exception e){ handle_exception(e);}
     }
 
-    //TODO
-    void insert_meter(int id_parking, int m_amount, int m_capcity, int p_amount, int p_capcity ){
-        String sql = "INSERT INTO \"Meters\" VALUES(NULL, ?, ?, ?, ?, ?);";
-        PreparedStatement prep = connector.getPrepStetm(sql);
-        try{
-            prep.setInt(1, id_parking);
-            prep.setInt(2, m_amount);
-            prep.setInt(3, m_capcity);
-            prep.setInt(4, p_amount);
-            prep.setInt(4, p_capcity);
-            prep.executeUpdate();
-        }
-        catch(Exception e){ handle_exception(e);}
+    private void register_transaction(int id_meter, int duration){
+
+
+
+
     }
+
 
     public String addFromUserInput(String table, ArrayList<String> input) {
         if (!Arrays.asList(getAllTableNames()).contains(table)) 
@@ -96,27 +82,26 @@ public class DataBaseModel {
         try {
             int key = input.get(0) == null
                 ? 0
-                : Integer.parse(input.get(0));
+                : Integer.parseInt(input.get(0));
             switch(table) {
                 case "Parkings":
-                    //TODO:
-                    //int address_key = getAddressDao().addAddress(
-                    getParkingDao().addParking(key, Integer.parseInt(input.get(1)), Integer.parseInt(input.get(2)));
+                    getParkingDao().addParking(Integer.parseInt(input.get(1)), Integer.parseInt(input.get(2)));
                     break;
                 case "Guards":
-                    getGuardDao().addGuard(key, Integer.parseInt(input.get(1)), input.get(2), input.get(3));
+                    getGuardDao().addGuard(Integer.parseInt(input.get(1)), input.get(2), input.get(3));
                     break;
                 case "Tickets":
-                    getTicketDao().addTicket(key, Integer.parseInt(input.get(1)), Integer.parseInt(input.get(2)), Integer.parseInt(input.get(3)), input.get(3), false);
+                    getTicketDao().addTicket(Integer.parseInt(input.get(1)), Integer.parseInt(input.get(2)), Integer.parseInt(input.get(3)), input.get(3), false);
                     break;
                 case "Meters":
-                    //TODO:
+                    getMeterDao().addMeter(Integer.parseInt(input.get(1)), Integer.parseInt(input.get(2)), Integer.parseInt(input.get(3)), Integer.parseInt(input.get(4)), Integer.parseInt(input.get(5))  );
                     break;
                 case "Transactions":
-                    //TODO:
+                    register_transaction(Integer.parseInt(input.get(1)), Integer.parseInt(input.get(2)) );
+                    //getTransactionDao().addTransaction(Integer.parseInt(input.get(1)), input.get(2), input.get(3), Integer.parseInt(input.get(4)));
                     break;
                 case "Parkings_Guards":
-                    getParkingGuardDao().addParkingGuard(key, Integer.parseInt(input.get(1)), Integer.parseInt(input.get(2)));
+                    getParkingGuardDao().addParkingGuard(Integer.parseInt(input.get(1)), Integer.parseInt(input.get(2)));
                     break;
     	        default:
     	        	throw new RuntimeException("Option not present for adding");
@@ -133,7 +118,7 @@ public class DataBaseModel {
         try {
             switch(table) {
                 case "Parkings":
-                    //TODO:
+                    //TODO
                     //int deleteress_key = getdeleteressDao().deletedeleteress(
                     getParkingDao().deleteParking(Integer.parseInt(key));
                     break;
@@ -144,10 +129,11 @@ public class DataBaseModel {
                     getTicketDao().deleteTicket(Integer.parseInt(key));
                     break;
                 case "Meters":
-                    //TODO:
+                    getMeterDao().deleteMeter(Integer.parseInt(key));
                     break;
                 case "Transactions":
                     //TODO:
+                    getTransactionDao().deleteTransaction(Integer.parseInt(key));
                     break;
                 case "Parkings_Guards":
                     getParkingGuardDao().deleteParkingGuard(Integer.parseInt(key));
@@ -163,7 +149,6 @@ public class DataBaseModel {
 
     private void handle_exception(Exception e){
         System.err.println("DataBaseModel: "+ e.getClass().getName() + ": " + e.getMessage());
-        System.exit(0);
     }
 
     public void close_connection(){

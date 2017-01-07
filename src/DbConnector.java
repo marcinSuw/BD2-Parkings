@@ -1,3 +1,5 @@
+import org.sqlite.SQLiteConfig;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -13,7 +15,9 @@ public class DbConnector {
 
         try {
             Class.forName("org.sqlite.JDBC");
-            connection = DriverManager.getConnection("jdbc:sqlite:"+file_name);
+            SQLiteConfig config = new SQLiteConfig();
+            config.enforceForeignKeys(true);
+            connection = DriverManager.getConnection("jdbc:sqlite:"+file_name, config.toProperties());
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);

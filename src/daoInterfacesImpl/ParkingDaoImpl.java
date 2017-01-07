@@ -47,8 +47,8 @@ public class ParkingDaoImpl extends DaoUtilities implements ParkingDao {
     }
 
     @Override
-    public void addParking(int id_address, int cost_per_hour) {
-        String sql = "INSERT INTO \"Parkings\" VALUES (NULL, ? , ?);";
+    public void addParking( int id_address, int cost_per_hour) {
+        String sql = "INSERT INTO \"Parkings\" VALUES (NULL, ?, ?);";
         try {
             PreparedStatement prep = connection.prepareStatement(sql);
             prep.setInt(1, id_address);
@@ -60,9 +60,10 @@ public class ParkingDaoImpl extends DaoUtilities implements ParkingDao {
         }
     }
 
+
+
     private void handle_exc(Exception e){
-        System.err.println("ParkingDaoImpl: "+ e.getClass().getName() + ": " + e.getMessage());
-        System.exit(0);
+        throw new RuntimeException("ParkingDaoImpl: "+ e.getClass().getName() + ": " + e.getMessage());
     }
 
 }

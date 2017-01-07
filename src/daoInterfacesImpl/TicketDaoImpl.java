@@ -42,7 +42,6 @@ public class TicketDaoImpl extends DaoUtilities implements TicketDao {
     }
 
     private void handle_exc(Exception e, String name_function){
-        System.err.println("GuardDaoImpl: " +name_function + e.getClass().getName() + ": " + e.getMessage());
-        System.exit(0);
+        throw new RuntimeException("TicketDaoImpl: " +name_function + e.getClass().getName() + ": " + e.getMessage());
     }
 }

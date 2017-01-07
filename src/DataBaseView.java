@@ -182,14 +182,12 @@ public class DataBaseView {
     	switch(chosen_table) {
     	    case "Parkings":
     	    	return new JComponent[] {
-    	    		new JLabel("Koszt za godzine"),
-    	    		new JTextField(),
-                    new JLabel("Kod pocztowy"),
-                    new JTextField(),
-                    new JLabel("Ulica"),
-                    new JTextField(),
-                    new JLabel("Numer ulicy"),
-                    new JTextField(),
+    	    	        new JLabel("Id adresu"),
+                        new JTextField(),
+                        new JLabel("Koszt za godzine"),
+    	    		    new JTextField(),
+
+
     	    	};
             case "Guards":
                 return new JComponent[] {
@@ -213,10 +211,27 @@ public class DataBaseView {
                 };
             case "Meters":
                 //TODO:
-                return new JComponent[] {};
+                return new JComponent[] {
+                        new JLabel("Id parkingu"),
+                        new JTextField(),
+                        new JLabel("Ilość pieniedzy"),
+                        new JTextField(),
+                        new JLabel("Pojemnosc pieniedzy"),
+                        new JTextField(),
+                        new JLabel("Ilosc papieru"),
+                        new JTextField(),
+                        new JLabel("Pojemnosc papieru"),
+                        new JTextField(),
+
+                };
             case "Transactions":
                 //TODO:
-                return new JComponent[] {};
+                return new JComponent[] {
+                        new JLabel("Id parkomatu"),
+                        new JTextField(),
+                        new JLabel("Liczba godzin"),
+                        new JTextArea(),
+                };
             case "Parkings_Guards":
                 return new JComponent[] {
                     new JLabel("Id parkingu"),

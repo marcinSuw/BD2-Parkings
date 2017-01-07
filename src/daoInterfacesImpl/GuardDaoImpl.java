@@ -32,7 +32,7 @@ public class GuardDaoImpl extends DaoUtilities implements GuardDao {
             stmt.setInt(3, pesel);
             stmt.executeUpdate();
         }
-        catch(Exception e){ handle_exc(e, "updateGuard"); }
+        catch(Exception e){  throw new RuntimeException("GuardDaoImpl: updateGuard"); }
     }
 
     @Override
@@ -54,7 +54,6 @@ public class GuardDaoImpl extends DaoUtilities implements GuardDao {
     }
 
     private void handle_exc(Exception e, String name_function){
-        System.err.println("GuardDaoImpl: " +name_function + e.getClass().getName() + ": " + e.getMessage());
-        System.exit(0);
+        throw new RuntimeException("GuardDaoImpl: " +name_function + e.getClass().getName() + ": " + e.getMessage());
     }
 }

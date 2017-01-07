@@ -19,8 +19,7 @@ public class DaoUtilities {
             prep.executeUpdate();
         }
         catch(Exception e){
-            System.err.println("Delete_object: "+ e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
+            throw new RuntimeException("Delete_object: "+ e.getClass().getName() + ": " + e.getMessage());
         }
 
     }
@@ -33,8 +32,8 @@ public class DaoUtilities {
             rs = stmt.executeQuery(sql);
         }
         catch(Exception e){
-            System.err.println("Get_Objects: " + e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
+            throw new RuntimeException("Get_Objects: " + e.getClass().getName() + ": " + e.getMessage());
+
         }
         return rs;
     }

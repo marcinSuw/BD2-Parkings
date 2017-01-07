@@ -67,8 +67,6 @@ public class Main {
         catch(Exception e){
 
         }
-
-        data_model.insert_ticket(12345, 1, 50, "123wr", false);
         data_model.insert_transaction(1, start_dates, end_dates, 30);
         System.out.println("Finished");*/
         //data_model.close_connection();
