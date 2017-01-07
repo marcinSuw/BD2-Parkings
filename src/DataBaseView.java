@@ -30,6 +30,8 @@ public class DataBaseView {
     private JScrollPane mainPane;
     private JList<String> tableList;
     private JButton addElementButton;
+    private JButton removeElementButton;
+    private JButton updateElementButton;
 
     private void prepareGUI(){
     	prepareMainFrame();
@@ -40,7 +42,12 @@ public class DataBaseView {
 
     private void prepareMainFrame() {
         mainFrame = new JFrame();
-        mainTable = new JTable();
+        mainTable = new JTable() {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        mainTable.setRowSelectionAllowed(false);
         mainPane = new JScrollPane(mainTable);
 
         mainFrame.add(mainPane, BorderLayout.CENTER);
@@ -60,13 +67,16 @@ public class DataBaseView {
             public void valueChanged(ListSelectionEvent event) {
             	if (!event.getValueIsAdjusting()) {
             		current_row = current_row > event.getFirstIndex()
-            				? event.getFirstIndex()
-            				: event.getLastIndex();
+            			? event.getFirstIndex()
+            			: event.getLastIndex();
                     String table_name = model.getAllTableNames()[current_row];
-                    if(table_name.equals("Addresses"))
+                    if(table_name.equals("Addresses")) {
                         addElementButton.setEnabled(false);
-                    else
+                    } else {
                         addElementButton.setEnabled(true);
+                        removeElementButton.setEnabled(true);
+                        updateElementButton.setEnabled(true);
+                    }
             		setMainTable(new DaoUtilities().get_objects(model.getConnector().getConnection(), model.getAllTableNames()[current_row]));
             	}
             }
@@ -81,33 +91,91 @@ public class DataBaseView {
     	JToolBar toolbar = new JToolBar();
     	toolbar.setFloatable(false);
     	toolbar.setLayout(new BoxLayout(toolbar, BoxLayout.Y_AXIS));
+        
+        prepareAddElementButton(toolbar);
+        prepareRemoveElementButton(toolbar);
+        prepareUpdateElementButton(toolbar);
 
+    	mainFrame.add(toolbar, BorderLayout.EAST);
+    }
+
+    private void prepareAddElementButton(JToolBar toolbar) {
     	addElementButton = new JButton("Dodaj rekord");
         addElementButton.setEnabled(false);
     	addElementButton.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent event) {
-    			if(!tableList.isSelectionEmpty()) {
-    				JComponent[] components = getComponentsFor(tableList.getSelectedValue());
-    				int result = JOptionPane.showConfirmDialog(null, components, "Dodawanie tablicy:", JOptionPane.OK_CANCEL_OPTION);
-    		        
-    				if(result == 0) {
-                        ArrayList<String> user_input = new ArrayList<String>();
-    					for(int i = 1; i < components.length; i += 2)
-    						user_input.add(((JTextField)components[i]).getText());
-
-                        String answer = model.addFromUserInput(tableList.getSelectedValue(), user_input);
-                        if(answer != null)
-                            JOptionPane.showMessageDialog(null, new JLabel(answer), "Nie udalo sie dodac", JOptionPane.OK_OPTION);
-                        else
-            		        setMainTable(new DaoUtilities().get_objects(model.getConnector().getConnection(), tableList.getSelectedValue()));
-                    }
-    			}
+                addElementAction(null);
     		}
     	});
     	toolbar.add(addElementButton);
-    	toolbar.add(new JButton("Keepo"));
-    	
-    	mainFrame.add(toolbar, BorderLayout.EAST);
+    }
+
+    private void addElementAction(String key) {
+    	if(!tableList.isSelectionEmpty()) {
+		    JComponent[] components = getComponentsFor(tableList.getSelectedValue());
+		    int result = JOptionPane.showConfirmDialog(null, components, "Dodawanie rekordu:", JOptionPane.OK_CANCEL_OPTION);
+            
+		    if(result == 0) {
+                ArrayList<String> user_input = new ArrayList<String>();
+
+                user_input.add(key);
+		    	for(int i = 1; i < components.length; i += 2)
+		    		user_input.add(((JTextField)components[i]).getText());
+
+                String answer = model.addFromUserInput(tableList.getSelectedValue(), user_input);
+                if(answer != null)
+                    JOptionPane.showMessageDialog(null, new JLabel(answer), "Nie udalo sie dodac", JOptionPane.OK_OPTION);
+                else
+		            setMainTable(new DaoUtilities().get_objects(model.getConnector().getConnection(), tableList.getSelectedValue()));
+            }
+        }
+    }
+
+    private void prepareRemoveElementButton(JToolBar toolbar) {
+    	removeElementButton = new JButton("Usun rekord");
+        removeElementButton.setEnabled(false);
+    	removeElementButton.addActionListener(new ActionListener() {
+    		public void actionPerformed(ActionEvent event) {
+                removeElementAction();
+    		}
+    	});
+    	toolbar.add(removeElementButton);
+    }
+
+    private String removeElementAction() {
+    	if(!tableList.isSelectionEmpty()) {
+            JComponent[] components = new JComponent[] {
+                new JLabel("Klucz glowny"),
+                new JTextField(),
+            };
+    		int result = JOptionPane.showConfirmDialog(null, components, "Usuwanie tablicy:", JOptionPane.OK_CANCEL_OPTION);
+            
+    		if(result == 0) {
+                String user_input = ((JTextField)components[1]).getText();
+
+                String answer = model.deleteFromUserInput(tableList.getSelectedValue(), user_input);
+                if(answer != null)
+                    JOptionPane.showMessageDialog(null, new JLabel(answer), "Nie udalo sie usunac", JOptionPane.OK_OPTION);
+                else
+    		        setMainTable(new DaoUtilities().get_objects(model.getConnector().getConnection(), tableList.getSelectedValue()));
+
+                return user_input;
+            }
+    	}
+        return null;
+    }
+
+    private void prepareUpdateElementButton(JToolBar toolbar) {
+    	updateElementButton = new JButton("Edytuj rekord");
+        updateElementButton.setEnabled(false);
+    	updateElementButton.addActionListener(new ActionListener() {
+    		public void actionPerformed(ActionEvent event) {
+                String deleted_key = removeElementAction();
+                if(deleted_key != null)
+                    addElementAction(deleted_key);
+    		}
+    	});
+    	toolbar.add(updateElementButton);
     }
     
     private JComponent[] getComponentsFor(String chosen_table) {
