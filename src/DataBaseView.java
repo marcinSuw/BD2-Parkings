@@ -41,7 +41,7 @@ public class DataBaseView {
         mainFrame.setTitle("DataBase");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        mainFrame.setVisible(true);
+
         mainPane.setVisible(true);
 
         tableList = new JList<String>(model.getAllTableNames());
@@ -61,6 +61,7 @@ public class DataBaseView {
         listScroller = new JScrollPane(tableList);
         listScroller.setVisible(true);
         mainFrame.add(tableList, BorderLayout.WEST);
+        mainFrame.setVisible(true);
     }
 
 
