@@ -115,13 +115,13 @@ public class DataBaseModel {
                 case "Guards":
                     getGuardDao().deleteGuard(Integer.parseInt(key));
                     break;
-                case "Tickets":
+                case "Tickets": //TO BE REMOVED
                     getTicketDao().deleteTicket(Integer.parseInt(key));
                     break;
                 case "Meters":
                     getMeterDao().deleteMeter(Integer.parseInt(key));
                     break;
-                case "Transactions":
+                case "Transactions": //TO BE REMOVED
                     //TODO:
                     getTransactionDao().deleteTransaction(Integer.parseInt(key));
                     break;

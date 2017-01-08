@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.util.Vector;
 import java.util.ArrayList;
+import java.util.Arrays;
 import daoInterfacesImpl.*;
 
 /**
@@ -70,13 +71,10 @@ public class DataBaseView {
             			? event.getFirstIndex()
             			: event.getLastIndex();
                     String table_name = model.getAllTableNames()[current_row];
-                    if(table_name.equals("Addresses")) {
-                        addElementButton.setEnabled(false);
-                    } else {
-                        addElementButton.setEnabled(true);
-                        removeElementButton.setEnabled(true);
-                        updateElementButton.setEnabled(true);
-                    }
+                    ArrayList<String> modifiable = new ArrayList<String>(Arrays.asList(new String[] {"Addresses", "Guards", "Parkings", "Meters", "Parkings_Guards"}));
+                    //setEnabledCRUButtons(modifiable.contains(table_name));
+                    //final version above, currently at:
+                    setEnabledCRUButtons(true);
             		setMainTable(new DaoUtilities().get_objects(model.getConnector().getConnection(), model.getAllTableNames()[current_row]));
             	}
             }
@@ -85,6 +83,12 @@ public class DataBaseView {
 
         mainFrame.add(tableList, BorderLayout.WEST);
         mainFrame.setVisible(true);
+    }
+
+    private void setEnabledCRUButtons(boolean enabled) {
+        addElementButton.setEnabled(enabled);
+        removeElementButton.setEnabled(enabled);
+        updateElementButton.setEnabled(enabled);
     }
 
     private void prepareButtons() {
@@ -182,12 +186,10 @@ public class DataBaseView {
     	switch(chosen_table) {
     	    case "Parkings":
     	    	return new JComponent[] {
-    	    	        new JLabel("Id adresu"),
-                        new JTextField(),
-                        new JLabel("Koszt za godzine"),
-    	    		    new JTextField(),
-
-
+    	    	    new JLabel("Id adresu"),
+                    new JTextField(),
+                    new JLabel("Koszt za godzine"),
+    	    		new JTextField(),
     	    	};
             case "Guards":
                 return new JComponent[] {
@@ -198,7 +200,7 @@ public class DataBaseView {
                     new JLabel("Nazwisko"),
                     new JTextField(),
                 };
-            case "Tickets":
+            case "Tickets": //TO BE REMOVED
                 return new JComponent[] {
                     new JLabel("Pesel"),
                     new JTextField(),
@@ -210,27 +212,24 @@ public class DataBaseView {
                     new JTextField(),
                 };
             case "Meters":
-                //TODO:
                 return new JComponent[] {
-                        new JLabel("Id parkingu"),
-                        new JTextField(),
-                        new JLabel("Ilość pieniedzy"),
-                        new JTextField(),
-                        new JLabel("Pojemnosc pieniedzy"),
-                        new JTextField(),
-                        new JLabel("Ilosc papieru"),
-                        new JTextField(),
-                        new JLabel("Pojemnosc papieru"),
-                        new JTextField(),
-
+                    new JLabel("Id parkingu"),
+                    new JTextField(),
+                    new JLabel("Ilość pieniedzy"),
+                    new JTextField(),
+                    new JLabel("Pojemnosc pieniedzy"),
+                    new JTextField(),
+                    new JLabel("Ilosc papieru"),
+                    new JTextField(),
+                    new JLabel("Pojemnosc papieru"),
+                    new JTextField(),
                 };
-            case "Transactions":
-                //TODO:
+            case "Transactions": //TO BE REMOVED:
                 return new JComponent[] {
-                        new JLabel("Id parkomatu"),
-                        new JTextField(),
-                        new JLabel("Liczba godzin"),
-                        new JTextField(),
+                    new JLabel("Id parkomatu"),
+                    new JTextField(),
+                    new JLabel("Liczba godzin"),
+                    new JTextArea(),
                 };
             case "Parkings_Guards":
                 return new JComponent[] {
