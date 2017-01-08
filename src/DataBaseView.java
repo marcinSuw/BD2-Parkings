@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.util.Vector;
 import java.util.ArrayList;
+import java.util.Arrays;
 import daoInterfacesImpl.*;
 
 /**
@@ -70,13 +71,10 @@ public class DataBaseView {
 						? event.getFirstIndex()
 						: event.getLastIndex();
 					String table_name = model.getAllTableNames()[current_row];
-					if(table_name.equals("Addresses")) {
-						addElementButton.setEnabled(false);
-					} else {
-						addElementButton.setEnabled(true);
-						removeElementButton.setEnabled(true);
-						updateElementButton.setEnabled(true);
-					}
+                    ArrayList<String> modifiable = new ArrayList<String>(Arrays.asList(new String[] {"Addresses", "Guards", "Parkings", "Meters", "Parkings_Guards"}));
+                    //final version, currently for tests commented out
+                    //setEnabledCRUButtons(modifiable.contains(table_name));
+                    setEnabledCRUButtons(true);
 					setMainTable(new DaoUtilities().get_objects(model.getConnector().getConnection(), model.getAllTableNames()[current_row]));
 				}
 			}
@@ -86,6 +84,12 @@ public class DataBaseView {
 		mainFrame.add(tableList, BorderLayout.WEST);
 		mainFrame.setVisible(true);
 	}
+
+    private void setEnabledCRUButtons(boolean enabled) {
+        addElementButton.setEnabled(enabled);
+        removeElementButton.setEnabled(enabled);
+        updateElementButton.setEnabled(enabled);
+    }
 
 	private void prepareButtons() {
 		JToolBar toolbar = new JToolBar();

@@ -82,13 +82,13 @@ public class DataBaseModel {
                 case "Guards":
                     getGuardDao().addGuard(Integer.parseInt(input.get(1)), input.get(2), input.get(3));
                     break;
-                case "Tickets":
+                case "Tickets": //TO BE REMOVED
                     getTicketDao().addTicket(Integer.parseInt(input.get(1)), Integer.parseInt(input.get(2)), Integer.parseInt(input.get(3)), input.get(3), false);
                     break;
                 case "Meters":
                     getMeterDao().addMeter(Integer.parseInt(input.get(1)), Integer.parseInt(input.get(2)), Integer.parseInt(input.get(3)), Integer.parseInt(input.get(4)), Integer.parseInt(input.get(5))  );
                     break;
-                case "Transactions":
+                case "Transactions": //TO BE REMOVED
                     register_transaction(Integer.parseInt(input.get(1)), Integer.parseInt(input.get(2)) );
                     //getTransactionDao().addTransaction(Integer.parseInt(input.get(1)), input.get(2), input.get(3), Integer.parseInt(input.get(4)));
                     break;
@@ -123,8 +123,8 @@ public class DataBaseModel {
                 case "Meters":
                     getMeterDao().deleteMeter(Integer.parseInt(key));
                     break;
-                case "Transactions":
-
+                case "Transactions": //TO BE REMOVED
+                    break;
                 case "Parkings_Guards":
                     getParkingGuardDao().deleteParkingGuard(Integer.parseInt(key));
                     break;
