@@ -1,6 +1,7 @@
 package daoInterfacesImpl;
 
 import daoInterfaces.MeterDao;
+import objects.Meter;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -22,13 +23,13 @@ public class MeterDaoImpl extends DaoUtilities implements MeterDao {
     }
 
     @Override
-    public void updateMeters(int id_meter, int id_parking, int moneyAmount, int moneyCapcity, int paperAmount, int paperCapcity) {
-        String sql = "UPDATE Meters SET  Id_Parking = ?, moneyAmount = ?, moneyCapcity = ?, paperAmount = ?, paperCapcity = ?  WHERE Id_Meter = ?;";
+    public void updateMeters(int id_meter, int id_parking, int monetAmount, int monetCapcity, int paperAmount, int paperCapcity) {
+        String sql = "UPDATE Meters SET  Id_Parking = ?, monetAmount = ?, monetCapcity = ?, paperAmount = ?, paperCapcity = ?  WHERE Id_Meter = ?;";
         try {
             PreparedStatement prep = connection.prepareStatement(sql);
             prep.setInt(1, id_parking);
-            prep.setInt(2, moneyAmount);
-            prep.setInt(3, moneyCapcity);
+            prep.setInt(2, monetAmount);
+            prep.setInt(3, monetCapcity);
             prep.setInt(4, paperAmount);
             prep.setInt(5, paperCapcity);
             prep.setInt(6, id_meter);
@@ -60,25 +61,35 @@ public class MeterDaoImpl extends DaoUtilities implements MeterDao {
         }
     }
     @Override
-    public int get_meter_id_parking(int id_meter){
-        int id_parking =0;
+    public Meter get_meter(int id_meter){
 
-        String sql = "SELECT Id_Parking FROM \"Meters\" WHERE Id_Meter = ? ;";
+        int id_parking =0;
+        int moneyAmount = 0;
+        int moneyCapcity = 0;
+        int paperAmount = 0;
+        int paperCapcity = 0;
+
+
+        String sql = "SELECT Id_Parking, monetAmount, monetCapcity, paperAmount, paperCapcity  FROM \"Meters\" WHERE Id_Meter = ? ;";
         try{
             PreparedStatement prep = connection.prepareStatement(sql);
             prep.setInt(1, id_meter);
             ResultSet rs = prep.executeQuery();
             while(rs.next()){
                 id_parking = rs.getInt("Id_Parking");
+                moneyAmount = rs.getInt("monetAmount");
+                moneyCapcity = rs.getInt("monetCapcity");
+                paperAmount = rs.getInt("paperAmount");
+                paperCapcity = rs.getInt("paperCapcity");
             }
         }
         catch(Exception e){
-            throw new RuntimeException("MeterDaoImpl: get_id_parking");
-
+            throw new RuntimeException("MeterDaoImpl: get_meter");
         }
 
+        Meter meter = new Meter(id_meter, id_parking, moneyAmount, moneyCapcity, paperAmount, paperCapcity);
 
-        return id_parking;
+        return meter;
 
     }
 }

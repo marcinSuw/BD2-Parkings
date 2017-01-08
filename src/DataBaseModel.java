@@ -1,6 +1,7 @@
 import daoInterfaces.*;
 import daoInterfacesImpl.*;
 import objects.Guard;
+import objects.Meter;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -59,10 +60,11 @@ public class DataBaseModel {
 
     private void register_transaction(int id_meter, int duration){
         ArrayList<String> dates = compute_time(duration);
-        int cost = getParkingDao().get_parking_cost(getMeterDao().get_meter_id_parking(id_meter));
-
-        getTransactionDao().addTransaction(id_meter, dates.get(0), dates.get(1), duration*cost);
-
+        Meter meter = getMeterDao().get_meter(id_meter);
+        int cost = duration* getParkingDao().get_parking_cost(meter.getId_parking());
+        getMeterDao().updateMeters(id_meter, meter.getId_parking(), meter.getMoneyAmount() + cost,
+                meter.getMoneyCapcity(), meter.getPaperAmount() - 1, meter.getPaperCapcity() );
+        getTransactionDao().addTransaction(id_meter, dates.get(0), dates.get(1), cost);
     }
 
 
@@ -122,7 +124,6 @@ public class DataBaseModel {
                     getMeterDao().deleteMeter(Integer.parseInt(key));
                     break;
                 case "Transactions":
-                    //TODO:
                     getTransactionDao().deleteTransaction(Integer.parseInt(key));
                     break;
                 case "Parkings_Guards":

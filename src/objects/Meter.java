@@ -19,4 +19,52 @@ public class Meter {
         this.paperAmount = paperAmount;
         this.paperCapcity = paperCapcity;
     }
+
+    public int getId_meter() {
+        return id_meter;
+    }
+
+    public void setId_meter(int id_meter) {
+        this.id_meter = id_meter;
+    }
+
+    public int getId_parking() {
+        return id_parking;
+    }
+
+    public void setId_parking(int id_parking) {
+        this.id_parking = id_parking;
+    }
+
+    public int getMoneyAmount() {
+        return moneyAmount;
+    }
+
+    public void setMoneyAmount(int moneyAmount) {
+        this.moneyAmount = moneyAmount;
+    }
+
+    public int getMoneyCapcity() {
+        return moneyCapcity;
+    }
+
+    public void setMoneyCapcity(int moneyCapcity) {
+        this.moneyCapcity = moneyCapcity;
+    }
+
+    public int getPaperAmount() {
+        return paperAmount;
+    }
+
+    public void setPaperAmount(int paperAmount) {
+        this.paperAmount = paperAmount;
+    }
+
+    public int getPaperCapcity() {
+        return paperCapcity;
+    }
+
+    public void setPaperCapcity(int paperCapcity) {
+        this.paperCapcity = paperCapcity;
+    }
 }
