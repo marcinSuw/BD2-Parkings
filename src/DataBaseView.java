@@ -230,7 +230,7 @@ public class DataBaseView {
                         new JLabel("Id parkomatu"),
                         new JTextField(),
                         new JLabel("Liczba godzin"),
-                        new JTextArea(),
+                        new JTextField(),
                 };
             case "Parkings_Guards":
                 return new JComponent[] {

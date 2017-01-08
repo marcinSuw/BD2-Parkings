@@ -4,8 +4,12 @@ import objects.Guard;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by szwarc on 02.01.17.
@@ -53,25 +57,11 @@ public class DataBaseModel {
         return new String[]{"Parkings", "Addresses", "Guards", "Parkings_Guards", "Tickets", "Meters", "Transactions"};
     }
 
-
-    void insert_transaction(int id_meter, String start_date, String end_date, int cost){
-        String sql = "INSERT INTO \"Transactions\" VALUES(NULL, ?, ?, ?, ?);";
-        PreparedStatement prep = connector.getPrepStetm(sql);
-        try{
-            prep.setInt(1, id_meter);
-            prep.setString(2, start_date);
-            prep.setInt(4, cost);
-            prep.setString(3, end_date);
-            prep.executeUpdate();
-
-        }
-        catch(Exception e){ handle_exception(e);}
-    }
-
     private void register_transaction(int id_meter, int duration){
+        ArrayList<String> dates = compute_time(duration);
+        int cost = getParkingDao().get_parking_cost(getMeterDao().get_meter_id_parking(id_meter));
 
-
-
+        getTransactionDao().addTransaction(id_meter, dates.get(0), dates.get(1), duration*cost);
 
     }
 
@@ -149,6 +139,25 @@ public class DataBaseModel {
 
     private void handle_exception(Exception e){
         System.err.println("DataBaseModel: "+ e.getClass().getName() + ": " + e.getMessage());
+    }
+
+    private ArrayList<String> compute_time(int duration){
+        ArrayList<String> dates = new ArrayList<String>();
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date start_data = new Date();
+        dates.add(df.format(start_data));
+        String end_dates = null;
+        try {
+            Calendar cal = Calendar.getInstance(); // creates calendar
+            cal.setTime(start_data); // sets calendar time/date
+            cal.add(Calendar.HOUR_OF_DAY, duration); // adds one hour
+            Date end_date = cal.getTime();
+            dates.add(df.format(end_date));
+        }
+        catch(Exception e){
+            throw new RuntimeException("DataBaseModel: compute_time");
+        }
+        return dates;
     }
 
     public void close_connection(){

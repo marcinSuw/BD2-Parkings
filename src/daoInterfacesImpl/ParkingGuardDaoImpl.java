@@ -58,4 +58,6 @@ public class ParkingGuardDaoImpl extends DaoUtilities implements ParkingGuardDao
     private void handle_exc(Exception e, String name_function){
         throw new RuntimeException("GuardDaoImpl: " +name_function + e.getClass().getName() + ": " + e.getMessage());
     }
+
+
 }

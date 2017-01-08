@@ -60,7 +60,27 @@ public class ParkingDaoImpl extends DaoUtilities implements ParkingDao {
         }
     }
 
+    @Override
+    public int get_parking_cost(int id_parking) {
 
+        int cost =0;
+
+        String sql = "SELECT costPerHour FROM \"Parkings\" WHERE Id_Parking = ? ;";
+        try{
+            PreparedStatement prep = connection.prepareStatement(sql);
+            prep.setInt(1, id_parking);
+            ResultSet rs = prep.executeQuery();
+            while(rs.next()){
+                cost = rs.getInt("costPerHour");
+            }
+        }
+        catch(Exception e){
+            throw new RuntimeException("ParkingDaoImpl: get_cost");
+        }
+
+
+        return cost;
+    }
 
     private void handle_exc(Exception e){
         throw new RuntimeException("ParkingDaoImpl: "+ e.getClass().getName() + ": " + e.getMessage());

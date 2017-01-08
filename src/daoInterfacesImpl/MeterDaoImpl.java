@@ -59,4 +59,26 @@ public class MeterDaoImpl extends DaoUtilities implements MeterDao {
             throw new RuntimeException("MeterDaoImpl: addMeter");
         }
     }
+    @Override
+    public int get_meter_id_parking(int id_meter){
+        int id_parking =0;
+
+        String sql = "SELECT Id_Parking FROM \"Meters\" WHERE Id_Meter = ? ;";
+        try{
+            PreparedStatement prep = connection.prepareStatement(sql);
+            prep.setInt(1, id_meter);
+            ResultSet rs = prep.executeQuery();
+            while(rs.next()){
+                id_parking = rs.getInt("Id_Parking");
+            }
+        }
+        catch(Exception e){
+            throw new RuntimeException("MeterDaoImpl: get_id_parking");
+
+        }
+
+
+        return id_parking;
+
+    }
 }

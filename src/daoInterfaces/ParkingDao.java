@@ -13,4 +13,5 @@ public interface ParkingDao {
     public void updateParking(int id_parking, int new_cost, int new_address);
     public void deleteParking(int id_parking);
     public void addParking(int id_address, int cost_per_hour);
+    public int get_parking_cost(int id_parking);
 }
