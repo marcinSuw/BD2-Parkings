@@ -77,20 +77,16 @@ public class DataBaseModel {
             
             switch(table) {
                 case "Parkings":
-                    getParkingDao().addParking(Integer.parseInt(input.get(1)), Integer.parseInt(input.get(2)));
+                    getParkingDao().addParking(Integer.parseInt(input.get(2)), Integer.parseInt(input.get(3)));
+                    break;
+                case "Addresses":
+                    getAddressDao().addAddress(input.get(2), input.get(3), Integer.parseInt(input.get(4)));
                     break;
                 case "Guards":
                     getGuardDao().addGuard(Integer.parseInt(input.get(1)), input.get(2), input.get(3));
                     break;
-                case "Tickets": //TO BE REMOVED
-                    getTicketDao().addTicket(Integer.parseInt(input.get(1)), Integer.parseInt(input.get(2)), Integer.parseInt(input.get(3)), input.get(3), false);
-                    break;
                 case "Meters":
-                    getMeterDao().addMeter(Integer.parseInt(input.get(1)), Integer.parseInt(input.get(2)), Integer.parseInt(input.get(3)), Integer.parseInt(input.get(4)), Integer.parseInt(input.get(5))  );
-                    break;
-                case "Transactions": //TO BE REMOVED
-                    register_transaction(Integer.parseInt(input.get(1)), Integer.parseInt(input.get(2)) );
-                    //getTransactionDao().addTransaction(Integer.parseInt(input.get(1)), input.get(2), input.get(3), Integer.parseInt(input.get(4)));
+                    getMeterDao().addMeter(Integer.parseInt(input.get(2)), Integer.parseInt(input.get(3)), Integer.parseInt(input.get(4)), Integer.parseInt(input.get(5)), Integer.parseInt(input.get(6))  );
                     break;
                 case "Parkings_Guards":
                     getParkingGuardDao().addParkingGuard(Integer.parseInt(input.get(1)), Integer.parseInt(input.get(2)));
@@ -108,16 +104,16 @@ public class DataBaseModel {
         try {
             switch(table) {
                 case "Parkings":
-                    getParkingDao().updateParking(Integer.parseInt(input.get(0)), Integer.parseInt(input.get(1)), Integer.parseInt(input.get(2)));
+                    getParkingDao().updateParking(Integer.parseInt(input.get(1)), Integer.parseInt(input.get(2)), Integer.parseInt(input.get(3)));
                     break;
                 case "Addresses":
-                    getAddressDao().updateAddress(Integer.parseInt(input.get(0)), input.get(1), input.get(2), Integer.parseInt(input.get(3)));
+                    getAddressDao().updateAddress(Integer.parseInt(input.get(1)), input.get(2), input.get(3), Integer.parseInt(input.get(4)));
                     break;
                 case "Guards":
                     getGuardDao().updateGuard(Integer.parseInt(input.get(1)), Integer.parseInt(input.get(2)), input.get(3), input.get(4));
                     break;
                 case "Meters":
-                    getMeterDao().updateMeters(Integer.parseInt(input.get(0)), Integer.parseInt(input.get(1)), Integer.parseInt(input.get(2)), Integer.parseInt(input.get(3)), Integer.parseInt(input.get(4)), Integer.parseInt(input.get(5)));
+                    getMeterDao().updateMeters(Integer.parseInt(input.get(1)), Integer.parseInt(input.get(2)), Integer.parseInt(input.get(3)), Integer.parseInt(input.get(4)), Integer.parseInt(input.get(5)), Integer.parseInt(input.get(6)));
                     break;
                 case "Parkings_Guards":
                     getParkingGuardDao().updateParkingGuard(Integer.parseInt(input.get(1)), Integer.parseInt(input.get(4)), Integer.parseInt(input.get(2)), Integer.parseInt(input.get(3)));

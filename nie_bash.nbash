@@ -1,0 +1,2 @@
+find src -name "*.class" -delete
+sh -c 'cd src; javac -classpath .:./sqlite-jdbc-3.15.1.jar Main.java' && java -classpath src:src/sqlite-jdbc-3.15.1.jar Main

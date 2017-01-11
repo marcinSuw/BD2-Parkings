@@ -101,6 +101,7 @@ public class DataBaseView {
 						: event.getLastIndex();
 					String table_name = model.getAllTableNames()[current_row];
                     ArrayList<String> modifiable = new ArrayList<String>(Arrays.asList(new String[] {"Addresses", "Guards", "Parkings", "Meters", "Parkings_Guards"}));
+<<<<<<< HEAD
                     if(modifiable.contains(table_name)) {
                         addElementButton.setEnabled(true);
                         removeElementButton.setEnabled(true);
@@ -110,14 +111,22 @@ public class DataBaseView {
                         removeElementButton.setEnabled(true);
                         updateElementButton.setEnabled(false);
                     }
-					//setMainTable(new DaoUtilities().get_objects(model.getConnector().getConnection(), model.getAllTableNames()[current_row]));
+					setMainTable(new DaoUtilities().get_objects(model.getConnector().getConnection(), model.getAllTableNames()[current_row]));
+=======
+                    //final version, currently for tests commented out
+                    //setEnabledCRUButtons(modifiable.contains(table_name));
                     if(current_row>6){
                     	setEnabledCRUButtons(false);
                     	setMainTable(createSQLQuery(current_row));
                     }
                     else{
+                    	setEnabledCRUButtons(true);
                     	setMainTable(new DaoUtilities().get_objects(model.getConnector().getConnection(), model.getAllTableNames()[current_row]));
                     }
+                    
+
+					
+>>>>>>> co z tym piwem
 				}
 			}
 			private int current_row;
@@ -241,15 +250,6 @@ public class DataBaseView {
                     new JTextField(),
                     new JLabel("Koszt za godzine"),
                     new JTextField(),
-				};
-			case "Addresses":
-				return new JComponent[] {
-					new JLabel("Kod pocztowy"),
-					new JTextField(),
-					new JLabel("Nazwa ulicy"),
-					new JTextField(),
-					new JLabel("Numer ulicy"),
-					new JTextField(),
 				};
 			case "Guards":
 				return new JComponent[] {
