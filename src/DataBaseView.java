@@ -13,17 +13,20 @@ import java.util.Vector;
 import java.util.ArrayList;
 import java.util.Arrays;
 import daoInterfacesImpl.*;
+import javax.sql.*;
+import java.sql.Statement;
 
 /**
  * Created by szwarc on 02.01.17.
  */
+
 public class DataBaseView {
 
 	public DataBaseView(DataBaseModel model){
 		this.model = model;
 		prepareGUI();
 	}
-
+	//private Statement stmt;
 	private DataBaseModel model;
 
 	private JFrame mainFrame;
@@ -61,6 +64,32 @@ public class DataBaseView {
 		mainPane.setVisible(true);
 	}
 
+
+	private ResultSet createSQLQuery(int row) {
+		String SQLQuery=null;
+		Statement stmt;
+		switch(row) {
+			case 7:
+				SQLQuery="SELECT ID_METER, SUM(cost), substr(startData, 0, 8 ) as date FROM TRANSACTIONS GROUP BY ID_METER, date;";
+			case 8:
+				SQLQuery="SELECT ID_PARKING, SUM(cost) as cost FROM ((SELECT ID_METER, SUM(cost) as cost FROM TRANSACTIONS GROUP BY ID_METER) NATURAL JOIN  (SELECT ID_METER, ID_PARKING FROM METERS)) GROUP BY ID_PARKING ;";
+			case 9:
+				SQLQuery="SELECT ID_PARKING, PAID, COUNT(*) as amount, SUM(charge) as cost FROM TICKETS GROUP BY ID_PARKING, PAID ;";			
+		}
+		ResultSet rs=null;
+		try{
+			stmt = model.getConnector().getConnection().createStatement();
+			rs = stmt.executeQuery(SQLQuery); 
+		}
+		catch(Exception e){
+
+		}
+		
+		return rs;
+	}
+
+
+
 	private void prepareTableList() {
 		tableList = new JList<String>(model.getAllTableNames());
 		tableList.setVisibleRowCount(model.getAllTableNames().length);
@@ -72,6 +101,7 @@ public class DataBaseView {
 						: event.getLastIndex();
 					String table_name = model.getAllTableNames()[current_row];
                     ArrayList<String> modifiable = new ArrayList<String>(Arrays.asList(new String[] {"Addresses", "Guards", "Parkings", "Meters", "Parkings_Guards"}));
+<<<<<<< HEAD
                     if(modifiable.contains(table_name)) {
                         addElementButton.setEnabled(true);
                         removeElementButton.setEnabled(true);
@@ -82,6 +112,21 @@ public class DataBaseView {
                         updateElementButton.setEnabled(false);
                     }
 					setMainTable(new DaoUtilities().get_objects(model.getConnector().getConnection(), model.getAllTableNames()[current_row]));
+=======
+                    //final version, currently for tests commented out
+                    //setEnabledCRUButtons(modifiable.contains(table_name));
+                    if(current_row>6){
+                    	setEnabledCRUButtons(false);
+                    	setMainTable(createSQLQuery(current_row));
+                    }
+                    else{
+                    	setEnabledCRUButtons(true);
+                    	setMainTable(new DaoUtilities().get_objects(model.getConnector().getConnection(), model.getAllTableNames()[current_row]));
+                    }
+                    
+
+					
+>>>>>>> co z tym piwem
 				}
 			}
 			private int current_row;
@@ -206,15 +251,6 @@ public class DataBaseView {
                     new JLabel("Koszt za godzine"),
                     new JTextField(),
 				};
-            case "Addresses":
-                return new JComponent[] {
-                    new JLabel("Kod pocztowy"),
-                    new JTextField(),
-                    new JLabel("Nazwa ulicy"),
-                    new JTextField(),
-                    new JLabel("Numer ulicy"),
-                    new JTextField(),
-                };
 			case "Guards":
 				return new JComponent[] {
 					new JLabel("Pesel"),
