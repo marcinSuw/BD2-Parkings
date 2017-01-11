@@ -79,6 +79,9 @@ public class DataBaseModel {
                 case "Parkings":
                     getParkingDao().addParking(Integer.parseInt(input.get(1)), Integer.parseInt(input.get(2)));
                     break;
+                case "Addresses":
+                    getAddressDao().addAddress(input.get(1), input.get(2), Integer.parseInt(input.get(3)));
+                    break;
                 case "Guards":
                     getGuardDao().addGuard(Integer.parseInt(input.get(1)), input.get(2), input.get(3));
                     break;
@@ -110,9 +113,10 @@ public class DataBaseModel {
         try {
             switch(table) {
                 case "Parkings":
-                    //TODO
-                    //int deleteress_key = getdeleteressDao().deletedeleteress(
                     getParkingDao().deleteParking(Integer.parseInt(key));
+                    break;
+                case "Addresses":
+                    getAddressDao().deleteAddress(Integer.parseInt(key));
                     break;
                 case "Guards":
                     getGuardDao().deleteGuard(Integer.parseInt(key));

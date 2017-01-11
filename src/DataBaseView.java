@@ -191,6 +191,15 @@ public class DataBaseView {
                     new JLabel("Koszt za godzine"),
                     new JTextField(),
 				};
+            case "Addresses":
+                return new JComponent[] {
+                    new JLabel("Kod pocztowy"),
+                    new JTextField(),
+                    new JLabel("Nazwa ulicy"),
+                    new JTextField(),
+                    new JLabel("Numer ulicy"),
+                    new JTextField(),
+                };
 			case "Guards":
 				return new JComponent[] {
 					new JLabel("Pesel"),
