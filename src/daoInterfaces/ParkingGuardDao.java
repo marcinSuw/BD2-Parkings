@@ -7,7 +7,7 @@ import java.sql.ResultSet;
  */
 public interface ParkingGuardDao {
     public ResultSet getParkingsGuards();
-    public void updateParkingGuard(int id_parking, int pesel);
+    public void updateParkingGuard(int old_pesel, int new_pesel, int old_parking, int new_parking);
     public void deleteParkingGuard(int id_parking);
     public void addParkingGuard(int id_parking, int pesel);
 

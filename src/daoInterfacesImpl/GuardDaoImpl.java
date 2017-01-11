@@ -22,17 +22,18 @@ public class GuardDaoImpl extends DaoUtilities implements GuardDao {
     }
 
     @Override
-    public void updateGuard(int pesel, String name, String surname) {
-        String sql = "UPDATE Guards SET name = ?, surname = ? WHERE pesel = ?;";
+    public void updateGuard(int old_pesel, int pesel, String name, String surname) {
+        String sql = "UPDATE Guards SET pesel = ?, name = ?, surname = ? WHERE pesel = ?;";
 
         try{
             PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setString(1, name);
-            stmt.setString(2, surname);
-            stmt.setInt(3, pesel);
+            stmt.setInt(1, pesel);
+            stmt.setString(2, name);
+            stmt.setString(3, surname);
+            stmt.setInt(4, old_pesel);
             stmt.executeUpdate();
         }
-        catch(Exception e){  throw new RuntimeException("GuardDaoImpl: updateGuard"); }
+        catch(Exception e){ throw new RuntimeException("GuardDaoImpl: updateGuard"); }
     }
 
     @Override

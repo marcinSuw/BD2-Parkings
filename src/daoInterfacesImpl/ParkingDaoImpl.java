@@ -32,7 +32,7 @@ public class ParkingDaoImpl extends DaoUtilities implements ParkingDao {
     }
 
     @Override
-    public void updateParking(int id_parking, int new_cost, int id_address){
+    public void updateParking(int id_parking, int id_address, int new_cost){
         String sql = "UPDATE Parkings SET costPerHour = ?, Id_Address = ? WHERE Id_Parking = ?;";
         try {
             PreparedStatement prep = connection.prepareStatement(sql);
@@ -47,7 +47,7 @@ public class ParkingDaoImpl extends DaoUtilities implements ParkingDao {
     }
 
     @Override
-    public void addParking( int id_address, int cost_per_hour) {
+    public void addParking(int id_address, int cost_per_hour) {
         String sql = "INSERT INTO \"Parkings\" VALUES (NULL, ?, ?);";
         try {
             PreparedStatement prep = connection.prepareStatement(sql);

@@ -10,7 +10,7 @@ import java.sql.ResultSet;
 public interface ParkingDao {
 
     public ResultSet getParkings();
-    public void updateParking(int id_parking, int new_cost, int new_address);
+    public void updateParking(int id_parking, int new_address, int new_cost);
     public void deleteParking(int id_parking);
     public void addParking(int id_address, int cost_per_hour);
     public int get_parking_cost(int id_parking);

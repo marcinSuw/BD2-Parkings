@@ -72,9 +72,15 @@ public class DataBaseView {
 						: event.getLastIndex();
 					String table_name = model.getAllTableNames()[current_row];
                     ArrayList<String> modifiable = new ArrayList<String>(Arrays.asList(new String[] {"Addresses", "Guards", "Parkings", "Meters", "Parkings_Guards"}));
-                    //final version, currently for tests commented out
-                    //setEnabledCRUButtons(modifiable.contains(table_name));
-                    setEnabledCRUButtons(true);
+                    if(modifiable.contains(table_name)) {
+                        addElementButton.setEnabled(true);
+                        removeElementButton.setEnabled(true);
+                        updateElementButton.setEnabled(true);
+                    } else {
+                        addElementButton.setEnabled(false);
+                        removeElementButton.setEnabled(true);
+                        updateElementButton.setEnabled(false);
+                    }
 					setMainTable(new DaoUtilities().get_objects(model.getConnector().getConnection(), model.getAllTableNames()[current_row]));
 				}
 			}
@@ -108,21 +114,21 @@ public class DataBaseView {
 		addElementButton.setEnabled(false);
 		addElementButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				addElementAction(null);
+				addElementAction(new ArrayList<String>());
 			}
 		});
 		toolbar.add(addElementButton);
 	}
 
-	private void addElementAction(String key) {
+	private void addElementAction(ArrayList<String> key) {
 		if(!tableList.isSelectionEmpty()) {
 			JComponent[] components = getComponentsFor(tableList.getSelectedValue());
 			int result = JOptionPane.showConfirmDialog(null, components, "Dodawanie rekordu:", JOptionPane.OK_CANCEL_OPTION);
 
 			if(result == 0) {
-				ArrayList<String> user_input = new ArrayList<String>();
+				ArrayList<String> user_input = new ArrayList<String>(key);
 
-				user_input.add(key);
+				user_input.add(key.isEmpty()?null:key.get(0));
 				for(int i = 1; i < components.length; i += 2)
 					user_input.add(((JTextField)components[i]).getText());
 
@@ -174,9 +180,18 @@ public class DataBaseView {
 		updateElementButton.setEnabled(false);
 		updateElementButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				String deleted_key = removeElementAction();
-				if(deleted_key != null)
-					addElementAction(deleted_key);
+                JComponent[] update = null;
+                if(tableList.getSelectedValue() != "Parkings_Guards")
+                    update = new JComponent[] { new JLabel("klucz glowny"), new JTextField() };
+                else
+                    update = getComponentsFor("Parkings_Guards");
+				int result = JOptionPane.showConfirmDialog(null, update, "Edycja elementu", JOptionPane.OK_CANCEL_OPTION);
+                ArrayList<String> update_key = new ArrayList<String>();
+                if (result == 0) 
+                    for(int i = 1; i < update.length; i+=2)
+                         update_key.add(((JTextField)update[i]).getText());
+				if(update_key != null)
+					addElementAction(update_key);
 			}
 		});
 		toolbar.add(updateElementButton);
@@ -232,7 +247,6 @@ public class DataBaseView {
                     new JTextField(),
                     new JLabel("Pojemnosc papieru"),
                     new JTextField(),
-
 				};
 			case "Transactions":
 				return new JComponent[] {

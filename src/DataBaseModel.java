@@ -72,9 +72,9 @@ public class DataBaseModel {
         if (!Arrays.asList(getAllTableNames()).contains(table)) 
             throw new RuntimeException("No table of name " + table + " exist");
         try {
-            int key = input.get(0) == null
-                ? 0
-                : Integer.parseInt(input.get(0));
+            if(input.get(0) != null) 
+                return updateFromUserInput(table, input);
+            
             switch(table) {
                 case "Parkings":
                     getParkingDao().addParking(Integer.parseInt(input.get(1)), Integer.parseInt(input.get(2)));
@@ -100,6 +100,33 @@ public class DataBaseModel {
                     break;
     	        default:
     	        	throw new RuntimeException("Option not present for adding");
+            }
+        } catch (Exception e) {
+            return e.getClass() + " " + e.getMessage();
+        }
+        return null;
+    }
+
+    public String updateFromUserInput(String table, ArrayList<String> input) {
+        try {
+            switch(table) {
+                case "Parkings":
+                    getParkingDao().updateParking(Integer.parseInt(input.get(0)), Integer.parseInt(input.get(1)), Integer.parseInt(input.get(2)));
+                    break;
+                case "Addresses":
+                    getAddressDao().updateAddress(Integer.parseInt(input.get(0)), input.get(1), input.get(2), Integer.parseInt(input.get(3)));
+                    break;
+                case "Guards":
+                    getGuardDao().updateGuard(Integer.parseInt(input.get(1)), Integer.parseInt(input.get(2)), input.get(3), input.get(4));
+                    break;
+                case "Meters":
+                    getMeterDao().updateMeters(Integer.parseInt(input.get(0)), Integer.parseInt(input.get(1)), Integer.parseInt(input.get(2)), Integer.parseInt(input.get(3)), Integer.parseInt(input.get(4)), Integer.parseInt(input.get(5)));
+                    break;
+                case "Parkings_Guards":
+                    getParkingGuardDao().updateParkingGuard(Integer.parseInt(input.get(1)), Integer.parseInt(input.get(4)), Integer.parseInt(input.get(2)), Integer.parseInt(input.get(3)));
+                    break;
+    	        default:
+    	        	throw new RuntimeException("Option not present for updating");
             }
         } catch (Exception e) {
             return e.getClass() + " " + e.getMessage();

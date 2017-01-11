@@ -20,13 +20,14 @@ public class ParkingGuardDaoImpl extends DaoUtilities implements ParkingGuardDao
     }
 
     @Override
-    public void updateParkingGuard(int id_parking, int pesel) {
-        String sql = "UPDATE Parkings_Guards SET pesel = ? WHERE Id_Parking = ?;";
-
+    public void updateParkingGuard(int old_pesel, int new_pesel, int old_parking, int new_parking) {
+        String sql = "UPDATE Parkings_Guards SET pesel = ?, Id_Parking = ? WHERE pesel = ? AND Id_Parking = ?;";
         try{
             PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setInt(1, pesel);
-            stmt.setInt(2, id_parking);
+            stmt.setInt(1, new_pesel);
+            stmt.setInt(2, new_parking);
+            stmt.setInt(3, old_pesel);
+            stmt.setInt(4, old_parking);
             stmt.executeUpdate();
         }
         catch (Exception e){

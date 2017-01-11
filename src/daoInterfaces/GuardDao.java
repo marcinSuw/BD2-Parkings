@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 public interface GuardDao {
 
     public ResultSet getGuards();
-    public void updateGuard(int pesel, String name, String surname);
+    public void updateGuard(int old_pesel, int pesel, String name, String surname);
     public void deleteGuard(int pesel);
     public void addGuard(int pesel, String name, String surname);
 

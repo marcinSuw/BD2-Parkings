@@ -38,4 +38,23 @@ public class DaoUtilities {
         return rs;
     }
 
+    static public void cascade_update_parking_guard(Connection con, int old_pesel, int new_pesel, String name, String surname) {
+        String sql = "UPDATE Parkings_Guards SET pesel = ? WHERE pesel = ?;"
+                      + "UPDATE Guards SET pesel = ? name = ? surname = ? where pesel = ?;";
+        try{
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setInt(1, new_pesel);
+            stmt.setInt(2, old_pesel);
+            stmt.setInt(3, new_pesel);
+            stmt.setString(4, name);
+            stmt.setString(5, surname);
+            stmt.setInt(6, old_pesel);
+
+            stmt.executeUpdate();
+        }
+        catch (Exception e){
+            System.out.println(e.getClass().getName());
+            throw new RuntimeException("Cascade update Parking Guard failed");
+        }
+    }
 }
