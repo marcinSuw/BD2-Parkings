@@ -69,6 +69,7 @@ public class DataBaseModel {
 
 
     public String addFromUserInput(String table, ArrayList<String> input) {
+        System.out.println(input);
         if (!Arrays.asList(getAllTableNames()).contains(table)) 
             throw new RuntimeException("No table of name " + table + " exist");
         try {
@@ -77,10 +78,10 @@ public class DataBaseModel {
             
             switch(table) {
                 case "Parkings":
-                    getParkingDao().addParking(Integer.parseInt(input.get(2)), Integer.parseInt(input.get(3)));
+                    getParkingDao().addParking(Integer.parseInt(input.get(1)), Integer.parseInt(input.get(2)));
                     break;
                 case "Addresses":
-                    getAddressDao().addAddress(input.get(2), input.get(3), Integer.parseInt(input.get(4)));
+                    getAddressDao().addAddress(input.get(1), input.get(2), Integer.parseInt(input.get(3)));
                     break;
                 case "Guards":
                     getGuardDao().addGuard(Integer.parseInt(input.get(1)), input.get(2), input.get(3));
@@ -137,6 +138,8 @@ public class DataBaseModel {
                     //int deleteress_key = getdeleteressDao().deletedeleteress(
                     getParkingDao().deleteParking(Integer.parseInt(key));
                     break;
+                case "Addresses":
+                    getAddressDao().deleteAddress(Integer.parseInt(key));
                 case "Guards":
                     getGuardDao().deleteGuard(Integer.parseInt(key));
                     break;
