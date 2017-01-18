@@ -70,11 +70,17 @@ public class DataBaseView {
 		Statement stmt;
 		switch(row) {
 			case 7:
+				// transakcje na parkomat
 				SQLQuery="SELECT ID_METER, SUM(cost), substr(startData, 0, 8 ) as date FROM TRANSACTIONS GROUP BY ID_METER, date;";
+				break;
 			case 8:
+				// transakcje na parking
 				SQLQuery="SELECT ID_PARKING, SUM(cost) as cost FROM ((SELECT ID_METER, SUM(cost) as cost FROM TRANSACTIONS GROUP BY ID_METER) NATURAL JOIN  (SELECT ID_METER, ID_PARKING FROM METERS)) GROUP BY ID_PARKING ;";
+				break;
 			case 9:
+				// mandaty na parking
 				SQLQuery="SELECT ID_PARKING, PAID, COUNT(*) as amount, SUM(charge) as cost FROM TICKETS GROUP BY ID_PARKING, PAID ;";			
+				break;
 		}
 		ResultSet rs=null;
 		try{
