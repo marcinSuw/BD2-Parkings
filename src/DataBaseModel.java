@@ -69,7 +69,6 @@ public class DataBaseModel {
 
 
     public String addFromUserInput(String table, ArrayList<String> input) {
-        System.out.println(input);
         if (!Arrays.asList(getAllTableNames()).contains(table)) 
             throw new RuntimeException("No table of name " + table + " exist");
         try {
@@ -167,7 +166,7 @@ public class DataBaseModel {
         System.err.println("DataBaseModel: "+ e.getClass().getName() + ": " + e.getMessage());
     }
 
-    private ArrayList<String> compute_time(int duration){
+    public ArrayList<String> compute_time(int duration){
         ArrayList<String> dates = new ArrayList<String>();
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         Date start_data = new Date();
@@ -190,6 +189,9 @@ public class DataBaseModel {
         connector.closeDB();
     }
 
+    public int calculateMoneyFor(Meter meter, int duration) {
+        return duration* getParkingDao().get_parking_cost(meter.getId_parking());
+    }
 }
 
 

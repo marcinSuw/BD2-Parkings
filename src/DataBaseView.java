@@ -15,6 +15,7 @@ import java.util.Arrays;
 import daoInterfacesImpl.*;
 import javax.sql.*;
 import java.sql.Statement;
+import objects.Meter;
 
 /**
  * Created by szwarc on 02.01.17.
@@ -149,7 +150,63 @@ public class DataBaseView {
 		prepareUpdateElementButton(toolbar);
 
 		mainFrame.add(toolbar, BorderLayout.EAST);
+
+        toolbar.add(Box.createVerticalGlue());
+        prepareBuyTicketButton(toolbar);
 	}
+
+    private void prepareBuyTicketButton(JToolBar toolbar) {
+        JButton buyTicketButton = new JButton("Kup bilet");
+        buyTicketButton.setEnabled(true);
+        buyTicketButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                JComponent[] components = getComponentsFor("Transactions");
+                int result = JOptionPane.showConfirmDialog(null, components, "Kupowanie biletu", JOptionPane.OK_CANCEL_OPTION);
+
+                if(result == 0) {
+                    ArrayList<String> user_input = new ArrayList<String>();
+                    user_input.add(null);
+
+				    for(int i = 1; i < components.length; i += 2)
+				    	user_input.add(((JTextField)components[i]).getText());
+
+                    try {
+                        Meter meter = model.getMeterDao().get_meter(Integer.parseInt(user_input.get(1)));
+                        if(meter.getPaperAmount() < 0)
+                            throw new RuntimeException("Brak papieru");
+                        int duration = Integer.parseInt(user_input.get(2));
+                        if(duration <= 0)
+                            throw new RuntimeException("Niewłaściwy czas parkowania");
+                        int cost = model.calculateMoneyFor(meter, duration);
+                        if(meter.getMoneyAmount() + cost > meter.getMoneyCapcity())
+                            throw new RuntimeException("Brak miejsca na moniaki");
+                        JComponent[] money_input_components = new JComponent[] {
+                            new JLabel("Wprowadz " + cost + " moniaków"),
+                            new JTextField()};
+                        int money_result = JOptionPane.showConfirmDialog(null, money_input_components, "Wprowadzanie pieniedzy", JOptionPane.OK_CANCEL_OPTION);
+                        if(money_result == 0) {
+                            int money_got = Integer.parseInt(((JTextField)money_input_components[1]).getText());
+                            if(money_got < cost) 
+                                throw new RuntimeException("Za mała kwota");
+                            else if(money_got > cost)
+                                JOptionPane.showMessageDialog(null, new JLabel("Reszta: " + (money_got - cost) + " moniaków"), "Wydawanie reszty", JOptionPane.OK_OPTION);
+                            
+                            ArrayList<String> times = model.compute_time(duration);
+                            JOptionPane.showMessageDialog(null, new JLabel("BILET od: " + times.get(0) + " do: " + times.get(1) + " za: " + cost + " moniaków"), "Bilet", JOptionPane.OK_OPTION);
+                            model.getMeterDao().updateMeters(Integer.parseInt(user_input.get(1)), meter.getId_parking(), meter.getMoneyAmount() + cost, meter.getMoneyCapcity(), meter.getPaperAmount() - 1, meter.getPaperCapcity());
+                            model.getTransactionDao().addTransaction(meter.getId_meter(), times.get(0), times.get(1), cost);
+                        }
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, new JLabel("Nie udało sie kupic: " + e.getMessage()), "Niepowodzenie", JOptionPane.OK_OPTION);
+                        return;
+                    }
+
+                }
+            }
+        });
+
+        toolbar.add(buyTicketButton);
+    }
 
 	private void prepareAddElementButton(JToolBar toolbar) {
 		addElementButton = new JButton("Dodaj rekord");
