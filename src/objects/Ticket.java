@@ -19,4 +19,28 @@ public class Ticket {
         this.registrationNUmber = registrationNUmber;
         this.paid = paid;
     }
+
+    public int getId_Ticket() {
+        return Id_Ticket;
+    }
+
+    public int getPesel() {
+        return pesel;
+    }
+
+    public int getId_Parking() {
+        return Id_Parking;
+    }
+
+    public int getCharge() {
+        return charge;
+    }
+
+    public String getRegistrationNUmber() {
+        return registrationNUmber;
+    }
+
+    public boolean isPaid() {
+        return paid;
+    }
 }
