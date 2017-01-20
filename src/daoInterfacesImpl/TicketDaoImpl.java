@@ -6,6 +6,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import objects.Ticket;
+
 /**
  * Created by szwarc on 05.01.17.
  */
@@ -17,8 +19,12 @@ public class TicketDaoImpl extends DaoUtilities implements TicketDao {
     @Override
     public ResultSet getTickets() { return this.get_objects(connection, "Tickets"); }
 
+    public Ticket getTicket(int id_ticket) {
+        return new Ticket(0, 0, 0, 0, "", false);
+    }
+
     @Override
-    public void updateTicket() {
+    public void updateTicket(int id_ticket, int pesel, int id_parking, int charge, String registrationNumber, boolean paid) {
     }
 
     @Override

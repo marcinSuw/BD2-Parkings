@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 public interface TicketDao {
 
     public ResultSet getTickets();
-    public void updateTicket();
+    public void updateTicket(int id_ticket, int pesel, int id_parking, int charge, String registrationNumber, boolean paid);
     public void deleteTicket(int id_ticket);
     public void addTicket(int pesel, int id_parking, int charge, String registrationNumber, boolean paid);
 }

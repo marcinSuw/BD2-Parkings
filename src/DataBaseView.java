@@ -16,6 +16,7 @@ import daoInterfacesImpl.*;
 import javax.sql.*;
 import java.sql.Statement;
 import objects.Meter;
+import objects.Ticket;
 
 /**
  * Created by szwarc on 02.01.17.
@@ -153,7 +154,62 @@ public class DataBaseView {
 
         toolbar.add(Box.createVerticalGlue());
         prepareBuyTicketButton(toolbar);
+        prepareIssueMandateButton(toolbar);
 	}
+
+    private void preparePayForMandateButton(JToolBar toolbar) {
+        JButton payForMandateButton = new JButton("Opłać mandat");
+        payForMandateButton.setEnabled(true);
+        payForMandateButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                JComponent[] components = new JComponent[] {
+                    new JLabel("Id mandatu: "),
+                    new JTextField()
+                };
+                int result = JOptionPane.showConfirmDialog(null, components, "Wystawianie mandatu", JOptionPane.OK_CANCEL_OPTION);
+
+                if(result == 0) {
+                    try {
+                        int id = Integer.parseInt(((JTextField)components[1]).getText());
+                        //Ticket ticket = model.getTicketDao.getTicket(id);
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, new JLabel("Nie udało sie wystawic mandatu: " + e.getMessage()), "Niepowodzenie", JOptionPane.OK_OPTION);
+                    }
+                }
+            }
+        });
+        toolbar.add(payForMandateButton);
+    };
+
+    private void prepareIssueMandateButton(JToolBar toolbar) {
+        JButton issueMandateButton = new JButton("Wystaw mandat");
+        issueMandateButton.setEnabled(true);
+        issueMandateButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                JComponent[] components = getComponentsFor("Tickets");
+                int result = JOptionPane.showConfirmDialog(null, components, "Wystawianie mandatu", JOptionPane.OK_CANCEL_OPTION);
+
+                if(result == 0) {
+                    ArrayList<String> user_input = new ArrayList<String>();
+                    user_input.add(null);
+
+				    for(int i = 1; i < components.length; i += 2)
+				    	user_input.add(((JTextField)components[i]).getText());
+                    
+                    try {
+                        int cost = Integer.parseInt(user_input.get(3));
+                        System.out.println(cost);
+                        if(cost < 0)
+                            throw new RuntimeException("Niewlasciwa kwota");
+                        model.getTicketDao().addTicket(Integer.parseInt(user_input.get(1)), Integer.parseInt(user_input.get(2)), cost, user_input.get(4), false);
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, new JLabel("Nie udało sie wystawic mandatu: " + e.getMessage()), "Niepowodzenie", JOptionPane.OK_OPTION);
+                    }
+                }
+            }
+        });
+        toolbar.add(issueMandateButton);
+    }
 
     private void prepareBuyTicketButton(JToolBar toolbar) {
         JButton buyTicketButton = new JButton("Kup bilet");
