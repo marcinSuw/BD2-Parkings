@@ -20,15 +20,15 @@ public class Ticket {
         this.paid = paid;
     }
 
-    public int getId_Ticket() {
-        return Id_Ticket;
+    public boolean getPaid() {
+        return paid;
     }
 
     public int getPesel() {
         return pesel;
     }
 
-    public int getId_Parking() {
+    public int getId_parking() {
         return Id_Parking;
     }
 
@@ -38,9 +38,5 @@ public class Ticket {
 
     public String getRegistrationNUmber() {
         return registrationNUmber;
-    }
-
-    public boolean isPaid() {
-        return paid;
     }
 }

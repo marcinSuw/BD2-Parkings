@@ -86,7 +86,7 @@ public class DataBaseModel {
                     getGuardDao().addGuard(Integer.parseInt(input.get(1)), input.get(2), input.get(3));
                     break;
                 case "Meters":
-                    getMeterDao().addMeter(Integer.parseInt(input.get(2)), Integer.parseInt(input.get(3)), Integer.parseInt(input.get(4)), Integer.parseInt(input.get(5)), Integer.parseInt(input.get(6))  );
+                    getMeterDao().addMeter(Integer.parseInt(input.get(1)), Integer.parseInt(input.get(2)), Integer.parseInt(input.get(3)), Integer.parseInt(input.get(4)), Integer.parseInt(input.get(5))  );
                     break;
                 case "Parkings_Guards":
                     getParkingGuardDao().addParkingGuard(Integer.parseInt(input.get(1)), Integer.parseInt(input.get(2)));

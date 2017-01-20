@@ -155,7 +155,14 @@ public class DataBaseView {
         toolbar.add(Box.createVerticalGlue());
         prepareBuyTicketButton(toolbar);
         prepareIssueMandateButton(toolbar);
+        preparePayForMandateButton(toolbar);
 	}
+
+    private void refreshView() {
+        String value = tableList.getSelectedValue();
+        if(value != "Raport1" && value != "Raport2" && value != "Raport3")
+		    setMainTable(new DaoUtilities().get_objects(model.getConnector().getConnection(), tableList.getSelectedValue()));
+    }
 
     private void preparePayForMandateButton(JToolBar toolbar) {
         JButton payForMandateButton = new JButton("Opłać mandat");
@@ -166,14 +173,19 @@ public class DataBaseView {
                     new JLabel("Id mandatu: "),
                     new JTextField()
                 };
-                int result = JOptionPane.showConfirmDialog(null, components, "Wystawianie mandatu", JOptionPane.OK_CANCEL_OPTION);
+                int result = JOptionPane.showConfirmDialog(null, components, "Opłacanie mandatu", JOptionPane.OK_CANCEL_OPTION);
 
                 if(result == 0) {
                     try {
                         int id = Integer.parseInt(((JTextField)components[1]).getText());
-                        //Ticket ticket = model.getTicketDao.getTicket(id);
+                        Ticket ticket = model.getTicketDao().getTicket(id);
+
+                        if(ticket.getPaid())
+                            throw new RuntimeException("Mandat był już opłacony");
+                        model.getTicketDao().updateTicket(id, ticket.getPesel(), ticket.getId_parking(), ticket.getCharge(), ticket.getRegistrationNUmber(), true);
+                        refreshView();
                     } catch (Exception e) {
-                        JOptionPane.showMessageDialog(null, new JLabel("Nie udało sie wystawic mandatu: " + e.getMessage()), "Niepowodzenie", JOptionPane.OK_OPTION);
+                        JOptionPane.showMessageDialog(null, new JLabel("Nie udało sie opłacić mandatu: " + e.getMessage()), "Niepowodzenie", JOptionPane.OK_OPTION);
                     }
                 }
             }
@@ -202,6 +214,7 @@ public class DataBaseView {
                         if(cost < 0)
                             throw new RuntimeException("Niewlasciwa kwota");
                         model.getTicketDao().addTicket(Integer.parseInt(user_input.get(1)), Integer.parseInt(user_input.get(2)), cost, user_input.get(4), false);
+                        refreshView();
                     } catch (Exception e) {
                         JOptionPane.showMessageDialog(null, new JLabel("Nie udało sie wystawic mandatu: " + e.getMessage()), "Niepowodzenie", JOptionPane.OK_OPTION);
                     }
@@ -251,6 +264,7 @@ public class DataBaseView {
                             JOptionPane.showMessageDialog(null, new JLabel("BILET od: " + times.get(0) + " do: " + times.get(1) + " za: " + cost + " moniaków"), "Bilet", JOptionPane.OK_OPTION);
                             model.getMeterDao().updateMeters(Integer.parseInt(user_input.get(1)), meter.getId_parking(), meter.getMoneyAmount() + cost, meter.getMoneyCapcity(), meter.getPaperAmount() - 1, meter.getPaperCapcity());
                             model.getTransactionDao().addTransaction(meter.getId_meter(), times.get(0), times.get(1), cost);
+                            refreshView();
                         }
                     } catch (Exception e) {
                         JOptionPane.showMessageDialog(null, new JLabel("Nie udało sie kupic: " + e.getMessage()), "Niepowodzenie", JOptionPane.OK_OPTION);
