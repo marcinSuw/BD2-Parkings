@@ -55,7 +55,7 @@ public class DataBaseModel {
     
     public String[] getAllTableNames() {
         //propably should be done smarter
-        return new String[]{"Parkings", "Addresses", "Guards", "Parkings_Guards", "Tickets", "Meters", "Transactions","Raport1","Raport2","Raport3"};
+        return new String[]{"Parkings", "Addresses", "Guards", "Parkings_Guards", "Tickets", "Meters", "Transactions","Zarobki - parkomat","Zarobki - parking","Mandat - parking"};
     }
 
     private void register_transaction(int id_meter, int duration){

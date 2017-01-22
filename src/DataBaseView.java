@@ -160,7 +160,7 @@ public class DataBaseView {
 
     private void refreshView() {
         String value = tableList.getSelectedValue();
-        if(value != "Raport1" && value != "Raport2" && value != "Raport3")
+        if(value != "Zarobki - parkomat" && value != "Zarobki - parking" && value != "Mandat - parking")
 		    setMainTable(new DaoUtilities().get_objects(model.getConnector().getConnection(), tableList.getSelectedValue()));
     }
 
@@ -210,7 +210,6 @@ public class DataBaseView {
                     
                     try {
                         int cost = Integer.parseInt(user_input.get(3));
-                        System.out.println(cost);
                         if(cost < 0)
                             throw new RuntimeException("Niewlasciwa kwota");
                         model.getTicketDao().addTicket(Integer.parseInt(user_input.get(1)), Integer.parseInt(user_input.get(2)), cost, user_input.get(4), false);
