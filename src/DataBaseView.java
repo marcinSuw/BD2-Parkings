@@ -179,6 +179,8 @@ public class DataBaseView {
                     try {
                         int id = Integer.parseInt(((JTextField)components[1]).getText());
                         Ticket ticket = model.getTicketDao().getTicket(id);
+                        if(ticket.getId_parking() == 0)
+                            throw new RuntimeException("Taki mandat nie istnieje.");
 
                         if(ticket.getPaid())
                             throw new RuntimeException("Mandat był już opłacony");
@@ -240,7 +242,9 @@ public class DataBaseView {
 
                     try {
                         Meter meter = model.getMeterDao().get_meter(Integer.parseInt(user_input.get(1)));
-                        if(meter.getPaperAmount() < 0)
+                        if(meter.getId_parking() == 0)
+                            throw new RuntimeException("Taki parkomat nie istnieje");
+                        if(meter.getPaperAmount() <= 0)
                             throw new RuntimeException("Brak papieru");
                         int duration = Integer.parseInt(user_input.get(2));
                         if(duration <= 0)
